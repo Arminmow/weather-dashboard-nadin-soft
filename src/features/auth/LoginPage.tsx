@@ -41,7 +41,7 @@ export function LoginPage() {
         {/* Banner Section */}
         <Box
           sx={{
-            display: "flex",
+            display: { xs: "none", sm: "none", md: "none", lg: "flex" },
             flex: 1,
             bgcolor: "#E0F7FA",
           }}

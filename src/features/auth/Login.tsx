@@ -45,14 +45,15 @@ Login.Banner = function LoginBanner() {
     <Box
       sx={{
         width: "100%",
-        height: "100%",
+        height: "100%", // or any height you want
         backgroundColor: "#D3E1E7",
         position: "relative",
+        overflow: "hidden", // this keeps clouds from peeking outside
       }}
     >
-      <BannerItem top="20%" left="3%" src="/images/sun-cloud-angled-rain.png" />
-      <BannerItem top="45%" left="45%" src="/images/moon-cloud-fast-wind.png" />
-      <BannerItem top="0%" left="45%" src="/images/moon-cloud-mid-rain.png" />
+      <BannerItem top="45%" left="30%" src="/images/sun-cloud-angled-rain.png" />
+      <BannerItem top="70%" left="70%" src="/images/moon-cloud-fast-wind.png" />
+      <BannerItem top="25%" left="70%" src="/images/moon-cloud-mid-rain.png" />
     </Box>
   );
 };
@@ -61,16 +62,28 @@ function BannerItem({ src, top, left }: { src: string; top: string; left: string
   return (
     <Box
       sx={{
-        width: "40%",
-        height: "50%",
-        position: "absolute", // 👈 needed for top & left
-        top: top,
-        left: left,
-        overflow: "hidden",
-        backgroundColor: "transparent",
+        position: "absolute",
+        top,
+        left,
+        width: "clamp(250px, 50%, 300px)", // clamps size between 150px and 300px, scaling with 15% parent width
+        height: "auto",
+        transform: "translate(-50%, -50%)",
       }}
     >
-      <img style={{ width: "100%", height: "100%" }} src={src} alt="Banner Item" />
+      <Box
+        component="img"
+        src={src}
+        alt="Banner Item"
+        sx={{
+          width: "100%",
+          height: "auto",
+          display: "block",
+          filter: "drop-shadow(-12.8px 51.21px 64.01px rgba(18,6,67,0.4))",
+          transform: "none",
+        }}
+      />
     </Box>
   );
 }
+
+
