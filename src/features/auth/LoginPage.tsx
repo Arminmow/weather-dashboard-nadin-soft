@@ -16,7 +16,7 @@ export function LoginPage() {
             height: "100%",
             bgcolor: "white",
             padding: "60px 0px",
-            boxSizing: "border-box"
+            boxSizing: "border-box",
           }}
         >
           <Box
@@ -30,10 +30,7 @@ export function LoginPage() {
             }}
           >
             <Box sx={{ textAlign: "center", width: "100%" }}>
-              <Typography variant="h4" fontWeight="bold" mb={4}>
-                Log in
-              </Typography>
-
+              <Login.Title />
               <Login.Input />
             </Box>
             <Login.Button />

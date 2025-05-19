@@ -1,4 +1,4 @@
-import { Box, TextField, Button, Paper } from "@mui/material";
+import { Box, TextField, Button, Paper, Typography } from "@mui/material";
 import { createContext, type ReactNode } from "react";
 
 interface LoginContextType {
@@ -38,9 +38,31 @@ Login.Input = function LoginInput() {
 
 Login.Button = function LoginButton() {
   return (
-    <Button sx={{ width: "100%" }} variant="contained" color="primary" type="submit">
+    <Button
+      sx={{ width: "100%", bgcolor: "#2196F3", px: "22px", py: "8px" }}
+      variant="contained"
+      color="primary"
+      type="submit"
+    >
       Login
     </Button>
+  );
+};
+
+Login.Title = function LoginTitle() {
+  return (
+    <Typography
+      variant="h4"
+      sx={{
+        fontWeight: 700,
+        fontFamily: "Roboto",
+        color: "#050F24",
+        mb: 4,
+        fontSize: "1.5rem",
+      }}
+    >
+      Login
+    </Typography>
   );
 };
 
@@ -81,7 +103,7 @@ function BannerItem({ src, sx = {} }: { src: string; sx?: object }) {
           width: "100%",
           height: "auto",
           display: "block",
-         filter: "drop-shadow(-12.8px 51.21px 30px rgba(18, 6, 67, 0.4))",
+          filter: "drop-shadow(-12.8px 51.21px 30px rgba(18, 6, 67, 0.4))",
         }}
       />
     </Box>
