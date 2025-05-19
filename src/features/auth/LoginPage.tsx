@@ -15,6 +15,8 @@ export function LoginPage() {
             alignItems: "center",
             height: "100%",
             bgcolor: "white",
+            padding: "60px 0px",
+            boxSizing: "border-box"
           }}
         >
           <Box
@@ -23,8 +25,8 @@ export function LoginPage() {
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "space-between",
-              width: "386px",
-              height: "355px",
+              width: "80%",
+              height: "80%",
             }}
           >
             <Box sx={{ textAlign: "center", width: "100%" }}>

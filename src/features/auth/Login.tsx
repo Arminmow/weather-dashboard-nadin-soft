@@ -13,7 +13,11 @@ export const Login = ({ children }: { children: ReactNode }) => {
       <Paper
         component="form"
         sx={{
-          width: "calc(100% * 2 / 3)",
+          width: {
+            xs: "95%",
+            sm: "95%",
+            md: "calc(100% * 2 / 4)",
+          },
           height: "calc(100% * 560 / 960)",
           display: "flex",
           flexDirection: "row",
@@ -45,29 +49,28 @@ Login.Banner = function LoginBanner() {
     <Box
       sx={{
         width: "100%",
-        height: "100%", // or any height you want
+        height: "100%",
         backgroundColor: "#D3E1E7",
         position: "relative",
-        overflow: "hidden", // this keeps clouds from peeking outside
+        overflow: "hidden",
       }}
     >
-      <BannerItem top="45%" left="30%" src="/images/sun-cloud-angled-rain.png" />
-      <BannerItem top="70%" left="70%" src="/images/moon-cloud-fast-wind.png" />
-      <BannerItem top="25%" left="70%" src="/images/moon-cloud-mid-rain.png" />
+      <BannerItem src="/images/sun-cloud-angled-rain.png" sx={{ top: "45%", left: "30%" }} />
+      <BannerItem src="/images/moon-cloud-fast-wind.png" sx={{ top: "70%", left: "70%" }} />
+      <BannerItem src="/images/moon-cloud-mid-rain.png" sx={{ top: "25%", left: "70%" }} />
     </Box>
   );
 };
 
-function BannerItem({ src, top, left }: { src: string; top: string; left: string }) {
+function BannerItem({ src, sx = {} }: { src: string; sx?: object }) {
   return (
     <Box
       sx={{
         position: "absolute",
-        top,
-        left,
-        width: "clamp(250px, 50%, 300px)", // clamps size between 150px and 300px, scaling with 15% parent width
+        width: "clamp(250px, 50%, 300px)",
         height: "auto",
         transform: "translate(-50%, -50%)",
+        ...sx,
       }}
     >
       <Box
@@ -78,12 +81,9 @@ function BannerItem({ src, top, left }: { src: string; top: string; left: string
           width: "100%",
           height: "auto",
           display: "block",
-          filter: "drop-shadow(-12.8px 51.21px 64.01px rgba(18,6,67,0.4))",
-          transform: "none",
+         filter: "drop-shadow(-12.8px 51.21px 30px rgba(18, 6, 67, 0.4))",
         }}
       />
     </Box>
   );
 }
-
-
