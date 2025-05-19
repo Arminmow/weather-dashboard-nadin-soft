@@ -1,17 +1,48 @@
 import { Box, TextField, Button, Paper, Typography } from "@mui/material";
-import { createContext, type ReactNode } from "react";
+import { createContext, useContext, useState, type ReactNode } from "react";
+import AuthService from "./authService";
 
 interface LoginContextType {
   username: string;
+  setUsername: (val: string) => void;
+  handleLogin: () => void;
+  error: string;
 }
 
 const LoginContext = createContext<LoginContextType | undefined>(undefined);
 
 export const Login = ({ children }: { children: ReactNode }) => {
+  const [username, setUsername] = useState("");
+  const [error, setError] = useState("");
+
+  const validate = (name: string) => {
+    if (name.trim().length < 3) {
+      setError("Username must be at least 3 characters.");
+      return false;
+    }
+    setError("");
+    return true;
+  };
+
+  const handleChange = (val: string) => {
+    setUsername(val);
+    validate(val);
+  };
+
+  const handleLogin = () => {
+    if (!validate(username)) return;
+
+    AuthService.login(username.trim());
+  };
+
   return (
-    <LoginContext.Provider value={{ username: "" }}>
+    <LoginContext.Provider value={{ username, setUsername: handleChange, handleLogin, error }}>
       <Paper
         component="form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleLogin();
+        }}
         sx={{
           width: {
             xs: "95%",
@@ -32,17 +63,35 @@ export const Login = ({ children }: { children: ReactNode }) => {
   );
 };
 
+const useLoginCtx = () => {
+  const ctx = useContext(LoginContext);
+  if (!ctx) throw new Error("Login.* used outside of <Login />");
+  return ctx;
+};
+
 Login.Input = function LoginInput() {
-  return <TextField sx={{ width: "100%" }} label="Enter Your Name" />;
+  const { username, setUsername, error } = useLoginCtx();
+  return (
+    <TextField
+      sx={{ width: "100%" }}
+      label="Enter Your Name"
+      value={username}
+      onChange={(e) => setUsername(e.target.value)}
+      error={!!error}
+      helperText={error || " "}
+    />
+  );
 };
 
 Login.Button = function LoginButton() {
+  const { error, username } = useLoginCtx();
   return (
     <Button
       sx={{ width: "100%", bgcolor: "#2196F3", px: "22px", py: "8px" }}
       variant="contained"
       color="primary"
       type="submit"
+      disabled={!!error || username.trim().length === 0}
     >
       Login
     </Button>
