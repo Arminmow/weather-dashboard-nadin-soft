@@ -1,8 +1,9 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useMemo, useState } from "react";
 import AuthService from "../auth/authService";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import {
   AppBar,
+  Autocomplete,
   Box,
   Button,
   CircularProgress,
@@ -12,9 +13,12 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
+  TextField,
   Toolbar,
   Typography,
 } from "@mui/material";
+import ApiService from "./apiService";
+import type { City } from "./types";
 
 interface DashboardContextType {
   username: string | null;
@@ -106,52 +110,54 @@ Dashboard.Header = function () {
 };
 
 Dashboard.Selector = function () {
-  const [cities, setCities] = useState<any>([]);
+  const [value, setValue] = useState(null);
+  const [inputValue, setInputValue] = useState("");
+  const [options, setOptions] = useState<City[]>([]);
   const [loading, setLoading] = useState(false);
-  const [selectedCity, setSelectedCity] = useState("");
 
-  useEffect(() => {
-    setLoading(true);
-    // Mock API call for cities
-    setTimeout(() => {
-      setCities([
-        { id: 1, name: "Tehran" },
-        { id: 2, name: "Mashhad" },
-        { id: 3, name: "Isfahan" },
-        { id: 4, name: "Shiraz" },
-      ]);
-      setLoading(false);
-    }, 1000);
+  const debounceTimeout = useMemo(() => {
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    return (callback: () => void, delay: number) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(callback, delay);
+    };
   }, []);
 
-  const handleChange = (event) => {
-    setSelectedCity(event.target.value);
-    // You can handle city change logic here or via context/state lift later
-    console.log("Selected city:", event.target.value);
-  };
+  useEffect(() => {
+    if (inputValue.length < 2) {
+      setOptions([]);
+      return;
+    }
+
+    setLoading(true);
+    debounceTimeout(() => {
+      ApiService.getCities(inputValue)
+        .then((cities) => {
+          console.log(cities);
+
+          setOptions(cities);
+          setLoading(false);
+        })
+        .catch(() => {
+          setOptions([]);
+          setLoading(false);
+        });
+    }, 400);
+  }, [inputValue, debounceTimeout]);
 
   return (
-    <FormControl sx={{ minWidth: 300 }} size="small">
-      <InputLabel id="city-select-label">Search Your Location</InputLabel>
-      {loading ? (
-        <CircularProgress size={24} sx={{ display: "block" }} />
-      ) : (
-        <Select
-          sx={{ height: "100%" }}
-          labelId="city-select-label"
-          id="city-select"
-          value={selectedCity}
-          label="Search Your Location"
-          onChange={handleChange}
-          input={<OutlinedInput label="Search Your Location" />}
-        >
-          {cities.map((city) => (
-            <MenuItem key={city.id} value={city.name}>
-              {city.name}
-            </MenuItem>
-          ))}
-        </Select>
-      )}
-    </FormControl>
+    <Autocomplete
+      value={value}
+      onChange={(_, newValue) => setValue(newValue)}
+      inputValue={inputValue}
+      onInputChange={(_, newInputValue) => setInputValue(newInputValue)}
+      options={options}
+      getOptionLabel={(option) => `${option.name} - ${option.country}`}
+      loading={loading}
+      filterOptions={(x) => x}
+      noOptionsText={inputValue.length < 2 ? "Type at least 2 characters" : "No cities found"}
+      renderInput={(params) => <TextField {...params} label="Search Your Location" variant="outlined" size="small" />}
+      sx={{ minWidth: 300 }}
+    />
   );
 };
