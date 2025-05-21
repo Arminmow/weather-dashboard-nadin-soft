@@ -35,16 +35,18 @@ const WeatherService = {
       const data = response.data;
       const now = new Date();
 
+      //This could be a function itself , but its fine for now
       const weatherInfo: WeatherData = {
-        date: now.toLocaleDateString(), // e.g. "5/21/2025"
-        day: now.toLocaleDateString("en-US", { weekday: "long" }), // e.g. "Wednesday"
-        time: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }), // "08:42 PM"
+        date: now.toLocaleDateString(),
+        day: now.toLocaleDateString("en-US", { weekday: "long" }),
+        time: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         city: data.name,
         temp: Math.round(data.main.temp),
         temp_min: Math.round(data.main.temp_min),
         temp_max: Math.round(data.main.temp_max),
         feels_like: Math.round(data.main.feels_like),
         description: data.weather[0].description,
+        icon: data.weather[0].icon,
       };
 
       return weatherInfo;

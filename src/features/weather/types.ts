@@ -8,4 +8,5 @@ export interface WeatherData {
   temp_max: number;
   feels_like: number;
   description: string;
+  icon: string;
 }
