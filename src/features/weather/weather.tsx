@@ -121,13 +121,27 @@ function DayDate({ day, date, time }: { day: string; date: string; time: string 
   );
 }
 
-function Temperature({ temp, temp_min, temp_max }: { temp: number; temp_min: number; temp_max: number }) {
+function Temperature({
+  temp,
+  temp_min,
+  temp_max,
+  showMinMax,
+}: {
+  temp: number;
+  temp_min: number;
+  temp_max: number;
+  showMinMax: boolean;
+}) {
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
       <Typography sx={{ ...typographyBase, ...size40 }}>{`${temp}°C`}</Typography>
-      <Typography sx={{ ...typographyBase, ...size14 }}>
-        High: {temp_max} Low: {temp_min}
-      </Typography>
+      {showMinMax ? (
+        <Typography sx={{ ...typographyBase, ...size14 }}>
+          High: {temp_max} Low: {temp_min}
+        </Typography>
+      ) : (
+        <></>
+      )}
     </Box>
   );
 }
@@ -135,12 +149,7 @@ function Temperature({ temp, temp_min, temp_max }: { temp: number; temp_min: num
 function WeatherIcon({ code, alt }: { code: string; alt: string }) {
   return (
     //OpenWeatherMap weather icon api. Not gonna download and store your Figma provided weather icons in /public, sorry
-    <Box
-      component="img"
-      src={code}
-      alt={alt}
-      sx={{ width: 100, height: 100 }}
-    />
+    <Box component="img" src={code} alt={alt} sx={{ width: 100, height: 100 }} />
   );
 }
 
@@ -163,7 +172,7 @@ Weather.SummeryCard = function () {
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <LocationBadge city={weather.city} />
           <DayDate day={weather.day} date={weather.date} time={weather.time} />
-          <Temperature temp={weather.temp} temp_min={weather.temp_min} temp_max={weather.temp_max} />
+          <Temperature temp={weather.temp} temp_min={weather.temp_min} temp_max={weather.temp_max} showMinMax={true} />
         </Box>
 
         <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
@@ -237,5 +246,73 @@ Weather.TemperatureChart = function () {
         />
       </Box>
     </Paper>
+  );
+};
+
+Weather.ForecastItem = function ({ day, src, temp }: { day: string; src: string; temp: number }) {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "24px",
+        borderRadius: "24px",
+        padding: "22px 16px",
+        bgcolor: "#CDD9E0",
+      }}
+    >
+      <Box sx={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: "center" }}>
+        <Typography>{day}</Typography>
+        <Box
+          sx={{
+            height: "2px",
+            width: "100%",
+            border: "0",
+            borderBottom: "2px solid",
+            borderImageSource: "linear-gradient(90deg, rgba(54, 54, 54, 0) 0%, #7E7E7E 48.5%, rgba(54, 54, 54, 0) 100%)",
+            borderImageSlice: 1,
+          }}
+        />
+        <WeatherIcon code={src} alt="weather icon" />
+        <Temperature temp={temp} temp_min={0} temp_max={0} showMinMax={false} />
+      </Box>
+    </Box>
+  );
+};
+
+Weather.ForecastWrapper = function () {
+  const { weather } = useContext(WeatherContext)!;
+  const forecast = weather?.forecast.forecastday;
+
+  return (
+    <Box
+      sx={{
+        overflowX: "auto",
+        width: "500px",
+        display: "flex",
+        flexDirection: "row",
+        gap: "24px",
+        padding: "22px 16px",
+        bgcolor: "#fff",
+        borderRadius: "24px",
+        scrollbarWidth: "none", // Firefox
+        "&::-webkit-scrollbar": { display: "none" }, // Chrome
+      }}
+    >
+      {forecast &&
+        forecast.map((day: any, index: number) => {
+          const weekday = new Date(day.date).toLocaleDateString("en-US", {
+            weekday: "long",
+          });
+          return (
+            <Weather.ForecastItem
+              key={index}
+              day={weekday}
+              src={day.day.condition.icon}
+              temp={Math.round(day.hour[0].temp_c)}
+            />
+          );
+        })}
+    </Box>
   );
 };

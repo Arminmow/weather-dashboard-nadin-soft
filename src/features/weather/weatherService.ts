@@ -43,12 +43,13 @@ const WeatherService = {
         day: now.toLocaleDateString("en-US", { weekday: "long" }),
         time: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         city: data.location.name,
-        temp: data.current.temp_c,
+        temp: Math.round(data.current.temp_c),
         temp_min: data.forecast.forecastday[0].day.mintemp_c,
         temp_max: data.forecast.forecastday[0].day.maxtemp_c,
         feels_like: data.current.feelslike_c,
         description: data.current.condition.text,
         icon: data.current.condition.icon,
+        forecast : data.forecast
       };
       console.log(weatherInfo.icon);
 

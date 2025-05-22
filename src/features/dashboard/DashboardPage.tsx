@@ -12,6 +12,7 @@ export function DashboardPage() {
           </Dashboard.Header>
           <Weather.SummeryCard />
           <Weather.TemperatureChart/>
+          <Weather.ForecastWrapper/>
         </Weather>
       </Dashboard>
     </div>
