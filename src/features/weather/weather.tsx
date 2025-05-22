@@ -167,7 +167,7 @@ Weather.SummeryCard = function () {
 
   if (!weather) return null;
   return (
-    <Paper elevation={4} sx={{ bgcolor: "#E1E9EE", borderRadius: 3, p: 3, width: "450px", mt: 4 }}>
+    <Paper elevation={4} sx={{ bgcolor: "#E1E9EE", borderRadius: 3, p: 3, width: "100%", mt: 4, boxSizing: "border-box" }}>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <LocationBadge city={weather.city} />
@@ -191,7 +191,7 @@ Weather.TemperatureChart = function () {
   const temps = Object.values(tempAvg);
 
   return (
-    <Paper elevation={4} sx={{ bgcolor: "#E1E9EE", borderRadius: 3, p: 3, width: "500px", mt: 4 }}>
+    <Paper elevation={4} sx={{ bgcolor: "#E1E9EE", borderRadius: 3, p: 3, width: "100%", mt: 4, boxSizing: "border-box"  }}>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Typography
           sx={{
@@ -226,7 +226,6 @@ Weather.TemperatureChart = function () {
               color: "#4CDFE8",
             },
           ]}
-          height={300}
           grid={{ horizontal: true, vertical: true }}
           sx={{
             // Style tick labels
@@ -288,12 +287,13 @@ Weather.ForecastWrapper = function () {
     <Box
       sx={{
         overflowX: "auto",
-        width: "500px",
+        width: "100%",
         display: "flex",
         flexDirection: "row",
         gap: "24px",
         padding: "22px 16px",
-        bgcolor: "#fff",
+        bgcolor: "#E1E9EE",
+        boxSizing: "border-box",
         borderRadius: "24px",
         scrollbarWidth: "none", // Firefox
         "&::-webkit-scrollbar": { display: "none" }, // Chrome
