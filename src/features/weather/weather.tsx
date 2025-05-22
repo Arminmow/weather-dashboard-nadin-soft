@@ -167,7 +167,7 @@ Weather.SummeryCard = function () {
 
   if (!weather) return null;
   return (
-    <Paper elevation={4} sx={{ bgcolor: "#E1E9EE", borderRadius: 3, p: 3, width: "100%", mt: 4, boxSizing: "border-box" }}>
+    <Paper elevation={4} sx={{ bgcolor: "#E1E9EE", borderRadius: 3, p: 3, width: "100%", mt: 2, boxSizing: "border-box", height:"100%" }}>
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <LocationBadge city={weather.city} />
@@ -191,7 +191,7 @@ Weather.TemperatureChart = function () {
   const temps = Object.values(tempAvg);
 
   return (
-    <Paper elevation={4} sx={{ bgcolor: "#E1E9EE", borderRadius: 3, p: 3, width: "100%", mt: 4, boxSizing: "border-box"  }}>
+    <Paper elevation={4} sx={{height: "100%",minHeight: "200px", bgcolor: "#E1E9EE", borderRadius: 3, p: 3, width: "100%", mt: 2, boxSizing: "border-box" }}>
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Typography
           sx={{
@@ -239,7 +239,7 @@ Weather.TemperatureChart = function () {
               strokeDasharray: "4 4",
             },
             "& .MuiChartsLineSeries-line": {
-              strokeWidth: 30,
+              strokeWidth: 3,
             },
           }}
         />
@@ -286,33 +286,50 @@ Weather.ForecastWrapper = function () {
   return (
     <Box
       sx={{
-        overflowX: "auto",
+        overflowX: "hidden",
         width: "100%",
         display: "flex",
-        flexDirection: "row",
-        gap: "24px",
-        padding: "22px 16px",
+        flexDirection: "column",
+        gap: "16px",
+        padding: "24px 28px",
         bgcolor: "#E1E9EE",
         boxSizing: "border-box",
         borderRadius: "24px",
-        scrollbarWidth: "none", // Firefox
-        "&::-webkit-scrollbar": { display: "none" }, // Chrome
       }}
     >
-      {forecast &&
-        forecast.map((day: any, index: number) => {
-          const weekday = new Date(day.date).toLocaleDateString("en-US", {
-            weekday: "long",
-          });
-          return (
-            <Weather.ForecastItem
-              key={index}
-              day={weekday}
-              src={day.day.condition.icon}
-              temp={Math.round(day.hour[0].temp_c)}
-            />
-          );
-        })}
+      {/* Title on top */}
+      <Typography variant="h6" sx={{ fontWeight: "600", color: "#333", whiteSpace: "nowrap", mb: 2 }}>
+        2 weeks Forecast
+      </Typography>
+
+      {/* Horizontal scroll row */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          gap: "24px",
+          overflowX: "auto",
+          scrollbarWidth: "none", // Firefox
+          "&::-webkit-scrollbar": {
+            display: "none", // Chrome, Safari, Edge
+          },
+        }}
+      >
+        {forecast &&
+          forecast.map((day: any, index: number) => {
+            const weekday = new Date(day.date).toLocaleDateString("en-US", {
+              weekday: "long",
+            });
+            return (
+              <Weather.ForecastItem
+                key={index}
+                day={weekday}
+                src={day.day.condition.icon}
+                temp={Math.round(day.hour[0].temp_c)}
+              />
+            );
+          })}
+      </Box>
     </Box>
   );
 };

@@ -2,6 +2,8 @@ import { createContext } from "react";
 import AuthService from "../auth/authService";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
+import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 
 interface DashboardContextType {
   username: string | null;
@@ -89,5 +91,70 @@ Dashboard.Header = function ({ children }: { children: React.ReactNode }) {
         </Box>
       </Toolbar>
     </AppBar>
+  );
+};
+
+Dashboard.Footer = function () {
+  return (
+    <Box
+      sx={{
+        width: "100%",
+        background: "linear-gradient(90deg, #F3FAFE 0%, rgba(204, 221, 221, 0.619608) 51%, #F3FAFE 100%)",
+        padding: "32px 20px",
+        boxSizing: "border-box",
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "space-between",
+          alignItems: "center",
+          rowGap: "20px",
+        }}
+      >
+        {/* Logo + copyright */}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            flex: "1 1 300px",
+            minWidth: "280px",
+          }}
+        >
+          <img src="/images/footerLogo.png" alt="Logo" style={{ width: "50px", height: "50px" }} />
+          <Typography variant="body2" sx={{ color: "#3D4852" }}>
+            All rights of this site are reserved for Nadin Sadr Aria Engineering Company.
+          </Typography>
+        </Box>
+
+        {/* Contact info */}
+        <Box
+          sx={{
+            display: "flex",
+            gap: "24px",
+            flexWrap: "wrap",
+            justifyContent: "flex-end",
+            flex: "1 1 300px",
+            minWidth: "280px",
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <MailOutlineOutlinedIcon sx={{ color: "#3D4852" }} />
+            <Typography variant="body2" sx={{ color: "#3D4852" }}>
+              contact us: info@nadin.ir
+            </Typography>
+          </Box>
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
+            <CalendarMonthOutlinedIcon sx={{ color: "#3D4852" }} />
+            <Typography variant="body2" sx={{ color: "#3D4852" }}>
+              12:25 · Monday 23 December 2023
+            </Typography>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
 };
