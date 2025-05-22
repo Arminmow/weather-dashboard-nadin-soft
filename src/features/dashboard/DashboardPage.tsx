@@ -11,7 +11,7 @@ export function DashboardPage() {
             <Weather.LocationSearch />
           </Dashboard.Header>
           <Weather.SummeryCard />
-          <button onClick={() => WeatherService.getDailyTemp(35.6892, 51.389)}>Test</button>
+          <Weather.TemperatureChart/>
         </Weather>
       </Dashboard>
     </div>

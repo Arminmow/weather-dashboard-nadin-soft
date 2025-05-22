@@ -74,8 +74,7 @@ const WeatherService = {
         },
       });
 
-      console.log(response.data);
-      WeatherService.calculateMonthlyAverage(response.data.daily.temperature_2m_mean, response.data.daily.time);
+      return WeatherService.calculateMonthlyAverage(response.data.daily.temperature_2m_mean, response.data.daily.time);
     } catch (error) {
       console.error("Error fetching daily temperature:", error);
     }
@@ -102,7 +101,7 @@ const WeatherService = {
     }
 
     console.log(monthlyAverages);
-    return monthlyAverages; 
+    return monthlyAverages;
   },
 };
 
