@@ -3,16 +3,18 @@ import type { WeatherData } from "./types";
 
 const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 
-const BASE_GEO_URL = "https://api.openweathermap.org/geo/1.0/direct";
-const BASE_WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather";
+const BASE_SEARCH_URL = "https://api.weatherapi.com/v1/search.json";
+const BASE_WEATHER_URL = "https://api.weatherapi.com/v1/forecast.json";
 const BASE_TEMP_URL = "https://archive-api.open-meteo.com/v1/archive";
 
 const WeatherService = {
-  getCities: async (query: string, limit: number = 5) => {
+  getCities: async (query: string) => {
     try {
-      const response = await axios.get(BASE_GEO_URL, {
-        params: { q: query, limit, appid: API_KEY },
+      const response = await axios.get(BASE_SEARCH_URL, {
+        params: { q: query, key: API_KEY },
       });
+      console.log(response.data);
+
       return response.data;
     } catch (error) {
       console.error("Error fetching cities:", error);
@@ -24,29 +26,31 @@ const WeatherService = {
     try {
       const response = await axios.get(BASE_WEATHER_URL, {
         params: {
-          lat,
-          lon,
-          appid: API_KEY,
-          units: "metric",
+          key: API_KEY,
+          q: `${lat},${lon}`,
+          days: 14,
+          hour: 0
         },
       });
 
       const data = response.data;
       const now = new Date();
-
+      console.log(data);
+      
       //This could be a function itself , but its fine for now
       const weatherInfo: WeatherData = {
         date: now.toLocaleDateString(),
         day: now.toLocaleDateString("en-US", { weekday: "long" }),
         time: now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        city: data.name,
-        temp: Math.round(data.main.temp),
-        temp_min: Math.round(data.main.temp_min),
-        temp_max: Math.round(data.main.temp_max),
-        feels_like: Math.round(data.main.feels_like),
-        description: data.weather[0].description,
-        icon: data.weather[0].icon,
+        city: data.location.name,
+        temp: data.current.temp_c,
+        temp_min: data.forecast.forecastday[0].day.mintemp_c,
+        temp_max: data.forecast.forecastday[0].day.maxtemp_c,
+        feels_like: data.current.feelslike_c,
+        description: data.current.condition.text,
+        icon: data.current.condition.icon,
       };
+      console.log(weatherInfo.icon);
 
       return weatherInfo;
     } catch (error) {

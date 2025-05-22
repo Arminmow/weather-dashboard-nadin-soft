@@ -137,7 +137,7 @@ function WeatherIcon({ code, alt }: { code: string; alt: string }) {
     //OpenWeatherMap weather icon api. Not gonna download and store your Figma provided weather icons in /public, sorry
     <Box
       component="img"
-      src={`https://openweathermap.org/img/wn/${code}@4x.png`}
+      src={code}
       alt={alt}
       sx={{ width: 100, height: 100 }}
     />
