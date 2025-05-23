@@ -1,0 +1,47 @@
+{
+  "welcome": "به برنامه من خوش آمدید",
+  "switch_language": "تغییر زبان",
+  "headerTitle": "داشبورد آب و هوا",
+  "locationSearch": "مکان مورد نظر را جستجو کنید",
+  "chartTitle": "میانگین دمای ماهانه",
+  "forecastTitle": "پیش بینی 2 هفته",
+  "weekDay": {
+    "Sunday": "یکشنبه",
+    "Monday": "دوشنبه",
+    "Tuesday": "سه شنبه",
+    "Wednesday": "چهارشنبه",
+    "Thursday": "پنج شنبه",
+    "Friday": "جمعه",
+    "Saturday": "شنبه"
+  },
+  "time": {
+    "PM": "بعد از ظهر",
+    "AM": "قبل از ظهر"
+  },
+  "temp": {
+    "max": "بیشینه",
+    "min": "کمینه",
+    "feelsLike": "احساس می شود"
+  },
+  "weather": {
+    "Rain": "باران",
+    "Snow": "برف",
+    "thunderstorm": "طوفان رعد و برق",
+    "mist": "مه",
+    "Sunny": "آفتابی",
+    "Partly Cloudy": "نیمه ابری",
+    "Patchy rain nearby": "بارش پراکنده در اطراف",
+    "Partly cloudy": "نیمه ابری",
+    "Overcast": "آسمان گرفته",
+    "Cloudy": "ابری",
+    "Light rain": "باران خفیف",
+    "Light rain shower": "رگبار باران خفیف",
+    "Thundery outbreaks possible": "احتمال طوفان رعد و برق",
+    "Mist": "مه",
+    "Clear": "صاف"
+  },
+  "footer": {
+    "text": "همه حقوق این سایت برای شرکت مهندسی نادین صدر آریا محفوظ است.",
+    "contact": "تماس با ما : info@nadin.ir"
+  }
+}
