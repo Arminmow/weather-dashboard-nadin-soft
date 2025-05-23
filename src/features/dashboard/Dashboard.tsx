@@ -67,7 +67,7 @@ Dashboard.Header = function ({ children }: { children: React.ReactNode }) {
             display: { xs: "none", sm: "block", md: "block" },
           }}
         >
-          {t('welcome')}
+          {t("headerTitle")}
         </Typography>
 
         {/* Right side - Selector and Icon */}
@@ -99,6 +99,8 @@ Dashboard.Header = function ({ children }: { children: React.ReactNode }) {
 };
 
 Dashboard.Footer = function () {
+  const { t, i18n } = useTranslation();
+  const isRtl = i18n.language === "fa";
   const theme = useTheme();
   return (
     <Box
@@ -117,6 +119,7 @@ Dashboard.Footer = function () {
           justifyContent: "space-between",
           alignItems: "center",
           rowGap: "20px",
+          direction: isRtl ? "rtl" : "ltr",
         }}
       >
         {/* Logo + copyright */}
@@ -130,9 +133,7 @@ Dashboard.Footer = function () {
           }}
         >
           <img src="/images/footerLogo.png" alt="Logo" style={{ width: "50px", height: "50px" }} />
-          <Typography variant="body2">
-            All rights of this site are reserved for Nadin Sadr Aria Engineering Company.
-          </Typography>
+          <Typography variant="body2">{t("footer.text")}</Typography>
         </Box>
 
         {/* Contact info */}
@@ -148,7 +149,7 @@ Dashboard.Footer = function () {
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
             <MailOutlineOutlinedIcon />
-            <Typography variant="body2">contact us: info@nadin.ir</Typography>
+            <Typography variant="body2">{t("footer.contact")}</Typography>
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>

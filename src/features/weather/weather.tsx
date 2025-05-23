@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, use, useContext, useEffect, useMemo, useState } from "react";
 import { Autocomplete, Box, Paper, TextField, Typography, useTheme } from "@mui/material";
 import { interBase, size14, size16, size32, size40, typographyBase } from "./styles";
 import WeatherService from "./weatherService";
@@ -6,6 +6,8 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import type { City } from "../dashboard/types";
 import type { WeatherData } from "./types";
 import { LineChart } from "@mui/x-charts";
+import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 interface DashboardContextType {
   weather: WeatherData | null;
@@ -24,6 +26,7 @@ export const Weather = ({ children }: { children: React.ReactNode }) => {
 };
 
 Weather.LocationSearch = function () {
+  const { t } = useTranslation();
   const [value, setValue] = useState<City | null>(null);
   const [inputValue, setInputValue] = useState<string>("");
   const [options, setOptions] = useState<City[]>([]);
@@ -84,7 +87,7 @@ Weather.LocationSearch = function () {
       loading={loading}
       filterOptions={(x) => x}
       noOptionsText={inputValue.length < 2 ? "Type at least 2 characters" : "No cities found"}
-      renderInput={(params) => <TextField {...params} label="Search Your Location" variant="outlined" size="small" />}
+      renderInput={(params) => <TextField {...params} label={t("locationSearch")} variant="outlined" size="small" />}
       sx={{ minWidth: 300 }}
     />
   );
@@ -96,28 +99,65 @@ function LocationBadge({ city }: { city: string }) {
     <Box
       sx={{
         bgcolor: theme.palette.surface.item,
-        p: "10px 13px",
-        borderRadius: "50px",
-        display: "flex",
+         p: "10px 13px",
+        borderRadius: "9999px", 
+        display: "flex", 
         gap: 1.5,
         alignItems: "center",
-        width: "fit-content",
       }}
     >
-      <LocationOnIcon />
-      <Typography sx={{ ...interBase, ...size16 }}>{city}</Typography>
+      <LocationOnIcon sx={{ color: theme.palette.text.primary, fontSize: 20 }} />
+      <Typography
+        sx={{
+          ...interBase,
+          ...size16,
+          color: theme.palette.text.primary,
+        }}
+      >
+        {city}
+      </Typography>
     </Box>
   );
 }
 
 function DayDate({ day, date, time }: { day: string; date: string; time: string }) {
+  const { t } = useTranslation();
   const theme = useTheme();
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: "4px", color: theme.palette.text.primary }}>
-      <Typography sx={{ ...typographyBase, ...size32 }}>{day}</Typography>
-      <Box sx={{ display: "flex", gap: "20px" }}>
-        <Typography sx={{ ...typographyBase, ...size14 }}>{date}</Typography>
-        <Typography sx={{ ...typographyBase, ...size14 }}>{time}</Typography>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 0.5,
+        color: theme.palette.text.primary,
+        fontFamily: "'Google Sans', sans-serif",
+        userSelect: "none",
+      }}
+    >
+      <Typography
+        sx={{
+          fontWeight: 600,
+          fontSize: "2rem",
+          lineHeight: 1.2,
+          letterSpacing: "0.02em",
+          color: theme.palette.text.primary,
+        }}
+      >
+        {t(`weekDay.${day}`)}
+      </Typography>
+
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2.5,
+          fontSize: "0.875rem",
+          fontWeight: 500,
+          color: theme.palette.text.secondary,
+          letterSpacing: "0.03em",
+        }}
+      >
+        <Typography>{date}</Typography>
+        <Typography>{time}</Typography>
       </Box>
     </Box>
   );
@@ -135,15 +175,41 @@ function Temperature({
   showMinMax: boolean;
 }) {
   const theme = useTheme();
+  const { t } = useTranslation();
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", color: theme.palette.text.primary }}>
-      <Typography sx={{ ...typographyBase, ...size40 }}>{`${temp}°C`}</Typography>
-      {showMinMax ? (
-        <Typography sx={{ ...typographyBase, ...size14 }}>
-          High: {temp_max} Low: {temp_min}
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        color: theme.palette.text.primary,
+        gap: 1,
+        userSelect: "none",
+      }}
+    >
+      <Typography
+        sx={{
+          fontWeight: 700,
+          fontSize: "3rem",
+          lineHeight: 1,
+          fontFamily: "'Google Sans', sans-serif",
+          color: theme.palette.text.primary,
+        }}
+      >
+        {`${temp}°C`}
+      </Typography>
+
+      {showMinMax && (
+        <Typography
+          sx={{
+            fontWeight: 500,
+            fontSize: "0.875rem", // 14px, smaller but readable
+            color: theme.palette.text.secondary,
+            fontFamily: "'Google Sans', sans-serif",
+            letterSpacing: "0.03em",
+          }}
+        >
+          {`${t("temp.max")}: ${temp_max}°  |  ${t("temp.min")}: ${temp_min}°`}
         </Typography>
-      ) : (
-        <></>
       )}
     </Box>
   );
@@ -157,10 +223,14 @@ function WeatherIcon({ code, alt }: { code: string; alt: string }) {
 }
 
 function WeatherDescription({ desc, feels_like }: { desc: string; feels_like: number }) {
+  const { t, i18n } = useTranslation();
+  const isRtl = i18n.language === "fa";
   return (
     <>
-      <Typography sx={{ ...interBase, ...size32 }}>{desc}</Typography>
-      <Typography sx={{ ...interBase, ...size16 }}>Feels Like {feels_like}°C</Typography>
+      <Typography sx={{ ...interBase, ...size32 }}>{t(`weather.${desc}`)}</Typography>
+      <Typography sx={{ ...interBase, ...size16, direction: isRtl ? "rtl" : "ltr" }}>
+        {t("temp.feelsLike")} {feels_like}°C
+      </Typography>
     </>
   );
 }
@@ -168,8 +238,12 @@ function WeatherDescription({ desc, feels_like }: { desc: string; feels_like: nu
 Weather.SummeryCard = function () {
   const { weather } = useContext(WeatherContext)!;
   const theme = useTheme();
+  const { i18n } = useTranslation();
 
   if (!weather) return null;
+
+  const isRtl = i18n.language === "fa";
+
   return (
     <Paper
       elevation={4}
@@ -181,16 +255,31 @@ Weather.SummeryCard = function () {
         mt: 2,
         boxSizing: "border-box",
         height: "100%",
+        direction: isRtl ? "rtl" : "ltr", // <-- Boom, flip the direction
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            textAlign: isRtl ? "right" : "left", // Optional: align text right on RTL
+          }}
+        >
           <LocationBadge city={weather.city} />
           <DayDate day={weather.day} date={weather.date} time={weather.time} />
           <Temperature temp={weather.temp} temp_min={weather.temp_min} temp_max={weather.temp_max} showMinMax={true} />
         </Box>
 
-        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 2,
+          }}
+        >
           <WeatherIcon code={weather.icon} alt={weather.description} />
           <WeatherDescription desc={weather.description} feels_like={weather.feels_like} />
         </Box>
@@ -198,13 +287,14 @@ Weather.SummeryCard = function () {
     </Paper>
   );
 };
-
 Weather.TemperatureChart = function () {
   const { tempAvg } = useContext(WeatherContext)!;
   const theme = useTheme();
+  const { t, i18n } = useTranslation();
+  const isRtl = i18n.language === "fa";
 
-  const months = Object.keys(tempAvg);
-  const temps = Object.values(tempAvg);
+  const months = isRtl ? Object.keys(tempAvg).reverse() : Object.keys(tempAvg);
+  const temps = isRtl ? Object.values(tempAvg).reverse() : Object.values(tempAvg);
 
   return (
     <Paper
@@ -218,6 +308,7 @@ Weather.TemperatureChart = function () {
         width: "100%",
         mt: 2,
         boxSizing: "border-box",
+        direction: isRtl ? "rtl" : "ltr",
       }}
     >
       <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -229,54 +320,57 @@ Weather.TemperatureChart = function () {
             lineHeight: "100%",
             letterSpacing: "0%",
             mb: 2,
+            textAlign: isRtl ? "right" : "left",
           }}
         >
-          Average Monthly Temperature
+          {t("chartTitle")}
         </Typography>
-
-        <LineChart
-          xAxis={[
-            {
-              scaleType: "point",
-              data: months,
-              disableLine: true, // Hide X-axis line
-            },
-          ]}
-          yAxis={[
-            {
-              disableLine: true, // Hide Y-axis line
-            },
-          ]}
-          series={[
-            {
-              data: temps,
-              showMark: false,
-              color: "#4CDFE8",
-            },
-          ]}
-          grid={{ horizontal: true, vertical: true }}
-          sx={{
-            // Style tick labels
-            "& .MuiChartsAxis-tickLabel": {
-              fontSize: 13,
-              fill: "#555",
-            },
-            // Style grid lines as dotted
-            "& .MuiChartsGrid-line": {
-              stroke: "#ccc",
-              strokeDasharray: "4 4",
-            },
-            "& .MuiChartsLineSeries-line": {
-              strokeWidth: 3,
-            },
-          }}
-        />
+        <Box sx={{ flex: 1, minHeight: 0 }}>
+          <LineChart
+            xAxis={[
+              {
+                scaleType: "point",
+                data: months,
+                disableLine: true,
+              },
+            ]}
+            yAxis={[
+              {
+                disableLine: true,
+                position: isRtl ? "right" : "left",
+                offset: 10,
+              },
+            ]}
+            series={[
+              {
+                data: temps,
+                showMark: false,
+              },
+            ]}
+            grid={{ horizontal: true, vertical: true }}
+            sx={{
+              direction: isRtl ? "rtl" : "ltr",
+              "& .MuiChartsAxis-tickLabel": {
+                fontSize: 13,
+                fill: theme.palette.text.primary,
+              },
+              "& .MuiChartsGrid-line": {
+                stroke: "#ccc",
+                strokeDasharray: "4 4",
+              },
+              "& .MuiChartsLineSeries-line": {
+                strokeWidth: 3,
+              },
+            }}
+          />
+        </Box>
       </Box>
     </Paper>
   );
 };
 
 Weather.ForecastItem = function ({ day, src, temp }: { day: string; src: string; temp: number }) {
+  const { t } = useTranslation();
   const theme = useTheme();
   return (
     <Box
@@ -290,7 +384,7 @@ Weather.ForecastItem = function ({ day, src, temp }: { day: string; src: string;
       }}
     >
       <Box sx={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: "center" }}>
-        <Typography sx={{ color: theme.palette.text.primary }}>{day}</Typography>
+        <Typography sx={{ color: theme.palette.text.primary }}>{t(`weekDay.${day}`)}</Typography>
         <Box
           sx={{
             height: "2px",
@@ -312,6 +406,8 @@ Weather.ForecastWrapper = function () {
   const { weather } = useContext(WeatherContext)!;
   const forecast = weather?.forecast.forecastday;
   const theme = useTheme();
+  const { t, i18n } = useTranslation();
+  const isRtl = i18n.language === "fa";
 
   return (
     <Paper
@@ -326,11 +422,12 @@ Weather.ForecastWrapper = function () {
         bgcolor: theme.palette.surface.card,
         boxSizing: "border-box",
         borderRadius: "24px",
+        direction: isRtl ? "rtl" : "ltr",
       }}
     >
       {/* Title on top */}
       <Typography variant="h6" sx={{ fontWeight: "600", color: theme.palette.text.primary, whiteSpace: "nowrap", mb: 2 }}>
-        2 weeks Forecast
+        {t("forecastTitle")}
       </Typography>
 
       {/* Horizontal scroll row */}

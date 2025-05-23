@@ -3,9 +3,13 @@ import { Weather } from "../weather/weather";
 import { Dashboard } from "./Dashboard";
 import ThemeToggleButton from "../theme/ThemeToggleButton";
 import LanguageToggle from "../i18n/LanguageToggle";
+import { useTranslation } from "react-i18next";
 
 export function DashboardPage() {
   const theme = useTheme();
+
+  const { i18n } = useTranslation();
+  const isRtl = i18n.language === "fa";
   return (
     <Box
       sx={{
@@ -21,8 +25,8 @@ export function DashboardPage() {
           <Weather>
             <Dashboard.Header>
               <Weather.LocationSearch />
-              <ThemeToggleButton/>
-              <LanguageToggle/>
+              <ThemeToggleButton />
+              <LanguageToggle />
             </Dashboard.Header>
 
             {/* Main content */}
@@ -42,17 +46,30 @@ export function DashboardPage() {
                 data-name="first row"
                 sx={{
                   display: "flex",
-                  flexDirection: { xs: "column", md: "row" },
+                  flexDirection: {
+                    xs: "column",
+                    md: isRtl ? "row-reverse" : "row", // 👈 Flip row only on desktop if fa
+                  },
                   width: "100%",
                   gap: "50px",
                   boxSizing: "border-box",
                 }}
               >
-                <Box sx={{ width: { xs: "100%", md: "40%" }, boxSizing: "border-box" }}>
+                <Box
+                  sx={{
+                    width: { xs: "100%", md: "40%" },
+                    boxSizing: "border-box",
+                  }}
+                >
                   <Weather.SummeryCard />
                 </Box>
 
-                <Box sx={{ width: { xs: "100%", md: "60%" }, boxSizing: "border-box" }}>
+                <Box
+                  sx={{
+                    width: { xs: "100%", md: "60%" },
+                    boxSizing: "border-box",
+                  }}
+                >
                   <Weather.TemperatureChart />
                 </Box>
               </Box>

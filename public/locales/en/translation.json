@@ -1,4 +1,40 @@
 {
   "welcome": "Welcome to my app",
-  "switch_language": "Switch Language"
+  "switch_language": "Switch Language",
+  "headerTitle": "Weather Dashboard",
+  "locationSearch": "Search Your Location",
+  "chartTitle": "Average Monthly Temprature",
+  "forecastTitle": "2 weeks Forecast",
+  "weekDay": {
+    "Sunday": "Sunday",
+    "Monday": "Monday",
+    "Tuesday": "Tuesday",
+    "Wednesday": "Wednesday",
+    "Thursday": "Thursday",
+    "Friday": "Friday",
+    "Saturday": "Saturday"
+  },
+  "time": {
+    "PM": "PM",
+    "AM": "AM"
+  },
+  "temp": {
+    "max": "Max",
+    "min": "Min",
+    "feelsLike": "Feels Like"
+  },
+  "weather": {
+    "clear": "Clear",
+    "clouds": "Clouds",
+    "rain": "Rain",
+    "snow": "Snow",
+    "thunderstorm": "Thunderstorm",
+    "mist": "Mist",
+    "Sunny": "Sunny",
+    "Partly cloudy": "Partly cloudy"
+  },
+  "footer": {
+    "text": "All rights of this site are reserved for Nadin Sadr Aria Engineering Company.",
+    "contact": "contact us: info@nadin.ir"
+  }
 }
