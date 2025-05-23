@@ -2,6 +2,7 @@ import { Box, useTheme } from "@mui/material";
 import { Weather } from "../weather/weather";
 import { Dashboard } from "./Dashboard";
 import ThemeToggleButton from "../theme/ThemeToggleButton";
+import LanguageToggle from "../i18n/LanguageToggle";
 
 export function DashboardPage() {
   const theme = useTheme();
@@ -21,6 +22,7 @@ export function DashboardPage() {
             <Dashboard.Header>
               <Weather.LocationSearch />
               <ThemeToggleButton/>
+              <LanguageToggle/>
             </Dashboard.Header>
 
             {/* Main content */}

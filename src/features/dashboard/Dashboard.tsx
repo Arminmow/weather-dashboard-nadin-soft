@@ -4,6 +4,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import { AppBar, Box, IconButton, Toolbar, Typography, useTheme } from "@mui/material";
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
+import { useTranslation } from "react-i18next";
 
 interface DashboardContextType {
   username: string | null;
@@ -33,6 +34,8 @@ export const Dashboard = ({ children }: { children: React.ReactNode }) => {
 };
 
 Dashboard.Header = function ({ children }: { children: React.ReactNode }) {
+  const { t } = useTranslation();
+
   const theme = useTheme();
   return (
     <AppBar position="static" sx={{ bgcolor: theme.palette.surface.main }}>
@@ -64,7 +67,7 @@ Dashboard.Header = function ({ children }: { children: React.ReactNode }) {
             display: { xs: "none", sm: "block", md: "block" },
           }}
         >
-          Weather Dashboard
+          {t('welcome')}
         </Typography>
 
         {/* Right side - Selector and Icon */}
