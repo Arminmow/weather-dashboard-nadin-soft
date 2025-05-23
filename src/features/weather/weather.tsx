@@ -274,6 +274,7 @@ function WeatherDescription({ desc, feels_like }: { desc: string; feels_like: nu
       </Typography>
 
       <Typography
+        component="div"
         sx={{
           ...interBase,
           ...size16,
@@ -282,7 +283,14 @@ function WeatherDescription({ desc, feels_like }: { desc: string; feels_like: nu
           opacity: 0.85,
         }}
       >
-        <Box sx={{ direction: isRtl ? "rtl" : "ltr", display: "inline-flex", gap: 0.5, alignItems: "center" }}>
+        <Box
+          sx={{
+            direction: isRtl ? "rtl" : "ltr",
+            display: "inline-flex",
+            gap: 0.5,
+            alignItems: "center",
+          }}
+        >
           {isRtl ? (
             <>
               <span>{Math.round(feels_like)}°C</span>
@@ -538,7 +546,7 @@ Weather.ForecastWrapper = function () {
           flexDirection: "row",
           gap: "24px",
           overflowX: "auto",
-          scrollbarWidth: "none", 
+          scrollbarWidth: "none",
           "&::-webkit-scrollbar": {
             display: "none",
           },
