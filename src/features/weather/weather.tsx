@@ -52,7 +52,6 @@ export const Weather = ({ children }: { children: React.ReactNode }) => {
     if (tempAvg && Object.keys(tempAvg).length > 0) localStorage.setItem("tempAvg", JSON.stringify(tempAvg));
   }, [tempAvg]);
 
-
   return <WeatherContext.Provider value={{ weather, setWeather, tempAvg, setTempAvg }}>{children}</WeatherContext.Provider>;
 };
 
@@ -399,6 +398,15 @@ Weather.TemperatureChart = function () {
   const { t, i18n } = useTranslation();
   const isRtl = i18n.language === "fa";
 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const hasData = Object.keys(tempAvg).length > 0;
+    if (hasData) {
+      setLoading(false);
+    }
+  }, [tempAvg]);
+
   const months = isRtl ? Object.keys(tempAvg).reverse() : Object.keys(tempAvg);
   const temps = isRtl ? Object.values(tempAvg).reverse() : Object.values(tempAvg);
 
@@ -433,6 +441,7 @@ Weather.TemperatureChart = function () {
         </Typography>
         <Box sx={{ flexGrow: 1 }}>
           <LineChart
+            loading={loading}
             height={200}
             xAxis={[
               {
