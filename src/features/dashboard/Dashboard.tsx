@@ -1,7 +1,7 @@
 import { createContext } from "react";
 import AuthService from "../auth/authService";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, IconButton, Toolbar, Typography, useTheme } from "@mui/material";
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 
@@ -33,8 +33,9 @@ export const Dashboard = ({ children }: { children: React.ReactNode }) => {
 };
 
 Dashboard.Header = function ({ children }: { children: React.ReactNode }) {
+  const theme = useTheme();
   return (
-    <AppBar position="static" sx={{ bgcolor: "#F3FAFE" }}>
+    <AppBar position="static" sx={{ bgcolor: theme.palette.surface.main }}>
       <Toolbar
         sx={{
           display: "flex",
@@ -59,7 +60,7 @@ Dashboard.Header = function ({ children }: { children: React.ReactNode }) {
             fontSize: "1.5rem",
             lineHeight: "150%",
             letterSpacing: "0.15px",
-            color: "#3D4852",
+            color: theme.palette.text.primary,
             display: { xs: "none", sm: "block", md: "block" },
           }}
         >
@@ -82,11 +83,11 @@ Dashboard.Header = function ({ children }: { children: React.ReactNode }) {
             sx={{
               fontWeight: "bold",
               color: "#3D4852",
-              border: "1px solid #3D4852",
+              border: `1px solid ${theme.palette.text.primary}`,
               borderRadius: "8px",
             }}
           >
-            <SettingsOutlinedIcon />
+            <SettingsOutlinedIcon sx={{ color: theme.palette.text.primary }} />
           </IconButton>
         </Box>
       </Toolbar>
@@ -95,13 +96,15 @@ Dashboard.Header = function ({ children }: { children: React.ReactNode }) {
 };
 
 Dashboard.Footer = function () {
+  const theme = useTheme();
   return (
     <Box
       sx={{
         width: "100%",
-        background: "linear-gradient(90deg, #F3FAFE 0%, rgba(204, 221, 221, 0.619608) 51%, #F3FAFE 100%)",
+        background: `linear-gradient(90deg, ${theme.palette.surface.card} 0%, ${theme.palette.surface.item} 50.5%, ${theme.palette.surface.main} 98%)`,
         padding: "32px 20px",
         boxSizing: "border-box",
+        color: theme.palette.text.primary,
       }}
     >
       <Box
@@ -124,7 +127,7 @@ Dashboard.Footer = function () {
           }}
         >
           <img src="/images/footerLogo.png" alt="Logo" style={{ width: "50px", height: "50px" }} />
-          <Typography variant="body2" sx={{ color: "#3D4852" }}>
+          <Typography variant="body2">
             All rights of this site are reserved for Nadin Sadr Aria Engineering Company.
           </Typography>
         </Box>
@@ -141,17 +144,13 @@ Dashboard.Footer = function () {
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            <MailOutlineOutlinedIcon sx={{ color: "#3D4852" }} />
-            <Typography variant="body2" sx={{ color: "#3D4852" }}>
-              contact us: info@nadin.ir
-            </Typography>
+            <MailOutlineOutlinedIcon />
+            <Typography variant="body2">contact us: info@nadin.ir</Typography>
           </Box>
 
           <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
-            <CalendarMonthOutlinedIcon sx={{ color: "#3D4852" }} />
-            <Typography variant="body2" sx={{ color: "#3D4852" }}>
-              12:25 · Monday 23 December 2023
-            </Typography>
+            <CalendarMonthOutlinedIcon />
+            <Typography variant="body2">12:25 · Monday 23 December 2023</Typography>
           </Box>
         </Box>
       </Box>

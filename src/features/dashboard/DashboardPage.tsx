@@ -1,15 +1,17 @@
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { Weather } from "../weather/weather";
 import { Dashboard } from "./Dashboard";
+import ThemeToggleButton from "../theme/ThemeToggleButton";
 
 export function DashboardPage() {
+  const theme = useTheme();
   return (
     <Box
       sx={{
         minHeight: "100vh", // full screen height
         display: "flex",
         flexDirection: "column",
-        bgcolor: "#F3FAFE", // optional
+        bgcolor: theme.palette.surface.main, // optional
       }}
     >
       {/* Main dashboard content */}
@@ -18,6 +20,7 @@ export function DashboardPage() {
           <Weather>
             <Dashboard.Header>
               <Weather.LocationSearch />
+              <ThemeToggleButton/>
             </Dashboard.Header>
 
             {/* Main content */}
@@ -43,11 +46,11 @@ export function DashboardPage() {
                   boxSizing: "border-box",
                 }}
               >
-                <Box sx={{ width: { xs: "100%", md: "33.33%" }, boxSizing: "border-box" }}>
+                <Box sx={{ width: { xs: "100%", md: "40%" }, boxSizing: "border-box" }}>
                   <Weather.SummeryCard />
                 </Box>
 
-                <Box sx={{ width: { xs: "100%", md: "66.66%" }, boxSizing: "border-box" }}>
+                <Box sx={{ width: { xs: "100%", md: "60%" }, boxSizing: "border-box" }}>
                   <Weather.TemperatureChart />
                 </Box>
               </Box>
