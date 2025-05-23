@@ -25,13 +25,20 @@
   },
   "weather": {
     "clear": "Clear",
-    "clouds": "Clouds",
-    "rain": "Rain",
-    "snow": "Snow",
-    "thunderstorm": "Thunderstorm",
-    "mist": "Mist",
+    "Rain": "Rain",
+    "Snow": "Snow",
+    "Cloudy": "Cloudy",
+    "Thunderstorm": "Thunderstorm",
     "Sunny": "Sunny",
-    "Partly cloudy": "Partly cloudy"
+    "Partly Cloudy": "Partly Cloudy",
+    "Patchy rain nearby" : "Patchy rain nearby",
+    "Partly cloudy" : "Partly cloudy",
+    "Overcast" : "Overcast",
+    "Light rain" : "Light rain",
+    "Light rain shower" : "Light rain shower",
+    "Thundery outbreaks possible" : "Thundery outbreaks possible",
+    "Mist" : "Mist",
+    "Clear" : "Clear"
   },
   "footer": {
     "text": "All rights of this site are reserved for Nadin Sadr Aria Engineering Company.",

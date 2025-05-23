@@ -24,14 +24,21 @@
     "feelsLike": "احساس می شود"
   },
   "weather": {
-    "clear": "صاف",
-    "clouds": "ابری",
-    "rain": "باران",
-    "snow": "برف",
+    "Rain": "باران",
+    "Snow": "برف",
     "thunderstorm": "طوفان رعد و برق",
     "mist": "مه",
     "Sunny": "آفتابی",
-    "Partly cloudy": "نیمه ابری"
+    "Partly Cloudy": "نیمه ابری",
+    "Patchy rain nearby": "بارش پراکنده در اطراف",
+    "Partly cloudy": "نیمه ابری",
+    "Overcast": "آسمان گرفته",
+    "Cloudy": "ابری",
+    "Light rain": "باران خفیف",
+    "Light rain shower": "رگبار باران خفیف",
+    "Thundery outbreaks possible": "احتمال طوفان رعد و برق",
+    "Mist": "مه",
+    "Clear": "صاف"
   },
   "footer": {
     "text": "همه حقوق این سایت برای شرکت مهندسی نادین صدر آریا محفوظ است.",
