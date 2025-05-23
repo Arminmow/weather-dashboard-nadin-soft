@@ -86,8 +86,27 @@ Weather.LocationSearch = function () {
       loading={loading}
       filterOptions={(x) => x}
       noOptionsText={inputValue.length < 2 ? "Type at least 2 characters" : "No cities found"}
-      renderInput={(params) => <TextField {...params} label={t("locationSearch")} variant="outlined" size="small" />}
-      sx={{ minWidth: 300 }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={t("locationSearch")}
+          variant="outlined"
+          size="small"
+          InputProps={{
+            ...params.InputProps,
+            sx: {
+              padding: { xs: "6px 8px", sm: "10px 14px" },
+            },
+          }}
+        />
+      )}
+      sx={{
+        minWidth: { xs: 250, sm: 300 },
+        maxWidth: "100%",
+        flexGrow: 1,
+        flexShrink: 1,
+        width: "100%",
+      }}
     />
   );
 };
