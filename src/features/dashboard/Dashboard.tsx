@@ -97,18 +97,19 @@ Dashboard.Header = function ({ children }: { children: React.ReactNode }) {
           }}
         >
           {children}
-          <IconButton
+          <Box
             color="inherit"
             aria-label="settings"
             sx={{
               fontWeight: "bold",
-              color: "#3D4852",
+              color: theme.palette.text.primary,
               border: `1px solid ${theme.palette.text.primary}`,
               borderRadius: "8px",
+              p: 0.5
             }}
           >
             <Dashboard.SettingsDropdown />
-          </IconButton>
+          </Box>
         </Box>
       </Toolbar>
     </AppBar>
