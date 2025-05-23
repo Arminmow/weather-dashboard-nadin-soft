@@ -1,13 +1,12 @@
-import { createContext, use, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { Autocomplete, Box, Paper, TextField, Typography, useTheme } from "@mui/material";
-import { interBase, size14, size16, size32, size40, typographyBase } from "./styles";
+import { LineChart } from "@mui/x-charts";
+import { useTranslation } from "react-i18next";
+import { interBase, size16, size32 } from "./styles";
 import WeatherService from "./weatherService";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import type { City } from "../dashboard/types";
 import type { WeatherData } from "./types";
-import { LineChart } from "@mui/x-charts";
-import { useTranslation } from "react-i18next";
-import { t } from "i18next";
 
 interface DashboardContextType {
   weather: WeatherData | null;
@@ -19,8 +18,39 @@ interface DashboardContextType {
 const WeatherContext = createContext<DashboardContextType | null>(null);
 
 export const Weather = ({ children }: { children: React.ReactNode }) => {
-  const [weather, setWeather] = useState<WeatherData | null>(null);
-  const [tempAvg, setTempAvg] = useState<Record<string, number>>({});
+  const DEFAULT_COORDS = { lat: 35.6892, lon: 51.389 };
+  const [weather, setWeather] = useState<WeatherData | null>(() => {
+    const saved = localStorage.getItem("weather");
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  const [tempAvg, setTempAvg] = useState<Record<string, number>>(() => {
+    const saved = localStorage.getItem("tempAvg");
+    return saved ? JSON.parse(saved) : {};
+  });
+
+  useEffect(() => {
+    if (!weather) {
+      WeatherService.getWeather(DEFAULT_COORDS.lat, DEFAULT_COORDS.lon).then((data) => {
+        setWeather(data);
+        localStorage.setItem("weather", JSON.stringify(data));
+      });
+    }
+    if (!tempAvg || Object.keys(tempAvg).length === 0) {
+      WeatherService.getDailyTemp(DEFAULT_COORDS.lat, DEFAULT_COORDS.lon).then((data) => {
+        setTempAvg(data ?? {});
+        localStorage.setItem("tempAvg", JSON.stringify(data ?? {}));
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (weather) localStorage.setItem("weather", JSON.stringify(weather));
+  }, [weather]);
+
+  useEffect(() => {
+    if (tempAvg && Object.keys(tempAvg).length > 0) localStorage.setItem("tempAvg", JSON.stringify(tempAvg));
+  }, [tempAvg]);
 
   return <WeatherContext.Provider value={{ weather, setWeather, tempAvg, setTempAvg }}>{children}</WeatherContext.Provider>;
 };
@@ -68,10 +98,8 @@ Weather.LocationSearch = function () {
 
     WeatherService.getWeather(newValue.lat, newValue.lon).then((data) => {
       setWeather(data);
-      console.log("weatherInfo", data);
     });
     WeatherService.getDailyTemp(newValue.lat, newValue.lon).then((data) => {
-      console.log("tempAvg", data);
       setTempAvg(data ?? {});
     });
   };
@@ -86,9 +114,28 @@ Weather.LocationSearch = function () {
       getOptionLabel={(option) => `${option.name} - ${option.country}`}
       loading={loading}
       filterOptions={(x) => x}
-      noOptionsText={inputValue.length < 2 ? "Type at least 2 characters" : "No cities found"}
-      renderInput={(params) => <TextField {...params} label={t("locationSearch")} variant="outlined" size="small" />}
-      sx={{ minWidth: 300 }}
+      noOptionsText={inputValue.length < 2 ? t("search.shortInput") : t("search.notFound")}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={t("locationSearch")}
+          variant="outlined"
+          size="small"
+          InputProps={{
+            ...params.InputProps,
+            sx: {
+              padding: { xs: "6px 8px", sm: "10px 14px" },
+            },
+          }}
+        />
+      )}
+      sx={{
+        minWidth: { xs: 250, sm: 300 },
+        maxWidth: "100%",
+        flexGrow: 1,
+        flexShrink: 1,
+        width: "100%",
+      }}
     />
   );
 };
@@ -99,9 +146,9 @@ function LocationBadge({ city }: { city: string }) {
     <Box
       sx={{
         bgcolor: theme.palette.surface.item,
-         p: "10px 13px",
-        borderRadius: "9999px", 
-        display: "flex", 
+        p: "10px 13px",
+        borderRadius: "9999px",
+        display: "flex",
         gap: 1.5,
         alignItems: "center",
       }}
@@ -112,6 +159,9 @@ function LocationBadge({ city }: { city: string }) {
           ...interBase,
           ...size16,
           color: theme.palette.text.primary,
+          fontFamily: "'Google Sans', sans-serif",
+          fontWeight: 400,
+          fontSize: "16px"
         }}
       >
         {city}
@@ -199,17 +249,21 @@ function Temperature({
       </Typography>
 
       {showMinMax && (
-        <Typography
+        <Box
           sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: 0.5,
             fontWeight: 500,
-            fontSize: "0.875rem", // 14px, smaller but readable
+            fontSize: "0.875rem",
             color: theme.palette.text.secondary,
             fontFamily: "'Google Sans', sans-serif",
             letterSpacing: "0.03em",
           }}
         >
-          {`${t("temp.max")}: ${temp_max}°  |  ${t("temp.min")}: ${temp_min}°`}
-        </Typography>
+          <Box>{`${t("temp.max")}: ${Math.round(temp_max)}`}</Box>
+          <Box>{`${t("temp.min")}: ${Math.round(temp_min)}`}</Box>
+        </Box>
       )}
     </Box>
   );
@@ -218,20 +272,74 @@ function Temperature({
 function WeatherIcon({ code, alt }: { code: string; alt: string }) {
   return (
     //OpenWeatherMap weather icon api. Not gonna download and store your Figma provided weather icons in /public, sorry
-    <Box component="img" src={code} alt={alt} sx={{ width: 100, height: 100 }} />
+    <Box component="img" src={code} alt={alt} />
   );
 }
 
 function WeatherDescription({ desc, feels_like }: { desc: string; feels_like: number }) {
   const { t, i18n } = useTranslation();
   const isRtl = i18n.language === "fa";
+  const theme = useTheme();
   return (
-    <>
-      <Typography sx={{ ...interBase, ...size32 }}>{t(`weather.${desc}`)}</Typography>
-      <Typography sx={{ ...interBase, ...size16, direction: isRtl ? "rtl" : "ltr" }}>
-        {t("temp.feelsLike")} {feels_like}°C
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "6px",
+        color: theme.palette.text.primary,
+        direction: isRtl ? "rtl" : "ltr",
+        textAlign: "center",
+      }}
+    >
+      <Typography
+        sx={{
+          ...interBase,
+          ...size32,
+          fontWeight: 400,
+          textAlign: "center",
+          whiteSpace: "normal",
+          wordBreak: "break-word",
+          lineHeight: 1.4,
+          maxWidth: "100%",
+          hyphens: "auto",
+          fontFamily: "'Google Sans', sans-serif",
+        }}
+      >
+        {t(`weather.${desc}`)}
       </Typography>
-    </>
+
+      <Typography
+        component="div"
+        sx={{
+          ...interBase,
+          ...size16,
+          fontWeight: 400,
+          textAlign: "center",
+          opacity: 0.85,
+        }}
+      >
+        <Box
+          sx={{
+            direction: isRtl ? "rtl" : "ltr",
+            display: "inline-flex",
+            gap: 0.5,
+            alignItems: "center",
+          }}
+        >
+          {isRtl ? (
+            <>
+              <span>{Math.round(feels_like)}°C</span>
+              <span>{t("temp.feelsLike")}</span>
+            </>
+          ) : (
+            <>
+              <span>{t("temp.feelsLike")}</span>
+              <span>{Math.round(feels_like)}°C</span>
+            </>
+          )}
+        </Box>
+      </Typography>
+    </Box>
   );
 }
 
@@ -255,7 +363,7 @@ Weather.SummeryCard = function () {
         mt: 2,
         boxSizing: "border-box",
         height: "100%",
-        direction: isRtl ? "rtl" : "ltr", // <-- Boom, flip the direction
+        direction: isRtl ? "rtl" : "ltr",
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -264,7 +372,7 @@ Weather.SummeryCard = function () {
             display: "flex",
             flexDirection: "column",
             gap: 2,
-            textAlign: isRtl ? "right" : "left", // Optional: align text right on RTL
+            textAlign: isRtl ? "right" : "left",
           }}
         >
           <LocationBadge city={weather.city} />
@@ -278,6 +386,7 @@ Weather.SummeryCard = function () {
             flexDirection: "column",
             alignItems: "center",
             gap: 2,
+            justifyContent: "center",
           }}
         >
           <WeatherIcon code={weather.icon} alt={weather.description} />
@@ -293,6 +402,15 @@ Weather.TemperatureChart = function () {
   const { t, i18n } = useTranslation();
   const isRtl = i18n.language === "fa";
 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const hasData = Object.keys(tempAvg).length > 0;
+    if (hasData) {
+      setLoading(false);
+    }
+  }, [tempAvg]);
+
   const months = isRtl ? Object.keys(tempAvg).reverse() : Object.keys(tempAvg);
   const temps = isRtl ? Object.values(tempAvg).reverse() : Object.values(tempAvg);
 
@@ -301,17 +419,16 @@ Weather.TemperatureChart = function () {
       elevation={4}
       sx={{
         height: "100%",
-        minHeight: "200px",
         bgcolor: theme.palette.surface.card,
         borderRadius: 3,
-        p: 3,
+        p: 1,
         width: "100%",
         mt: 2,
         boxSizing: "border-box",
         direction: isRtl ? "rtl" : "ltr",
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%" }}>
         <Typography
           sx={{
             fontFamily: "Google Sans, sans-serif",
@@ -319,19 +436,26 @@ Weather.TemperatureChart = function () {
             fontSize: "18px",
             lineHeight: "100%",
             letterSpacing: "0%",
-            mb: 2,
+            m: 2,
+            mb: 0,
             textAlign: isRtl ? "right" : "left",
           }}
         >
           {t("chartTitle")}
         </Typography>
-        <Box sx={{ flex: 1, minHeight: 0 }}>
+        <Box sx={{ flexGrow: 1 }}>
           <LineChart
+            loading={loading}
+            height={200}
             xAxis={[
               {
                 scaleType: "point",
                 data: months,
                 disableLine: true,
+                tickLabelStyle: {
+                  fontSize: 12,
+                  fill: theme.palette.text.primary,
+                },
               },
             ]}
             yAxis={[
@@ -351,7 +475,7 @@ Weather.TemperatureChart = function () {
             sx={{
               direction: isRtl ? "rtl" : "ltr",
               "& .MuiChartsAxis-tickLabel": {
-                fontSize: 13,
+                fontSize: 5,
                 fill: theme.palette.text.primary,
               },
               "& .MuiChartsGrid-line": {
@@ -359,8 +483,10 @@ Weather.TemperatureChart = function () {
                 strokeDasharray: "4 4",
               },
               "& .MuiChartsLineSeries-line": {
-                strokeWidth: 3,
+                strokeWidth: 5,
               },
+              height: "100%",
+              justifyContent: "end",
             }}
           />
         </Box>
@@ -377,14 +503,27 @@ Weather.ForecastItem = function ({ day, src, temp }: { day: string; src: string;
       sx={{
         display: "flex",
         flexDirection: "column",
-        gap: "24px",
-        borderRadius: "24px",
+        gap: 3,
+        borderRadius: 4,
         padding: "22px 16px",
         bgcolor: theme.palette.surface.item,
+        alignItems: "center",
+        boxShadow: "0 2px 6px rgba(0,0,0,0.04)",
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: "center" }}>
-        <Typography sx={{ color: theme.palette.text.primary }}>{t(`weekDay.${day}`)}</Typography>
+      {/* Header & Day */}
+      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
+        <Typography
+          sx={{
+            color: theme.palette.text.primary,
+            fontSize: "1rem",
+            fontWeight: 600,
+          }}
+        >
+          {t(`weekDay.${day}`)}
+        </Typography>
+
+        {/* Divider */}
         <Box
           sx={{
             height: "2px",
@@ -395,9 +534,24 @@ Weather.ForecastItem = function ({ day, src, temp }: { day: string; src: string;
             borderImageSlice: 1,
           }}
         />
-        <WeatherIcon code={src} alt="weather icon" />
-        <Temperature temp={temp} temp_min={0} temp_max={0} showMinMax={false} />
       </Box>
+
+      {/* Weather Icon */}
+      <WeatherIcon code={src} alt="weather icon" />
+
+      {/* Temp */}
+      <Typography
+        sx={{
+          fontFamily: "'Google Sans', sans-serif",
+          fontWeight: 500,
+          fontSize: "18px",
+          lineHeight: "100%",
+          letterSpacing: "0%",
+          color: theme.palette.text.primary,
+        }}
+      >
+        {`${temp}°C`}
+      </Typography>
     </Box>
   );
 };
@@ -426,7 +580,19 @@ Weather.ForecastWrapper = function () {
       }}
     >
       {/* Title on top */}
-      <Typography variant="h6" sx={{ fontWeight: "600", color: theme.palette.text.primary, whiteSpace: "nowrap", mb: 2 }}>
+      <Typography
+        variant="h6"
+        sx={{
+          fontFamily: "'Google Sans', sans-serif",
+          fontWeight: 600,
+          fontSize: "24px",
+          lineHeight: "100%",
+          letterSpacing: "0%",
+          color: theme.palette.text.primary,
+          whiteSpace: "nowrap",
+          mb: 2,
+        }}
+      >
         {t("forecastTitle")}
       </Typography>
 
@@ -437,17 +603,24 @@ Weather.ForecastWrapper = function () {
           flexDirection: "row",
           gap: "24px",
           overflowX: "auto",
-          scrollbarWidth: "none", // Firefox
+          scrollbarWidth: "none",
           "&::-webkit-scrollbar": {
-            display: "none", // Chrome, Safari, Edge
+            display: "none",
           },
         }}
       >
         {forecast &&
           forecast.map((day: any, index: number) => {
-            const weekday = new Date(day.date).toLocaleDateString("en-US", {
-              weekday: "long",
-            });
+            const today = new Date();
+            const dayDate = new Date(day.date + "T00:00:00");
+
+            const isToday =
+              today.getFullYear() === dayDate.getFullYear() &&
+              today.getMonth() === dayDate.getMonth() &&
+              today.getDate() === dayDate.getDate();
+
+            const weekday = isToday ? "Today" : dayDate.toLocaleDateString("en-US", { weekday: "long" });
+
             return (
               <Weather.ForecastItem
                 key={index}

@@ -1,10 +1,25 @@
-import { createContext } from "react";
-import AuthService from "../auth/authService";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import { AppBar, Box, IconButton, Toolbar, Typography, useTheme } from "@mui/material";
+import { createContext, useState } from "react";
+import {
+  AppBar,
+  Box,
+  Divider,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import { useTranslation } from "react-i18next";
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-import { useTranslation } from "react-i18next";
+import AuthService from "../auth/authService";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import LanguageToggle from "../i18n/LanguageToggle";
+import ThemeToggleButton from "../theme/ThemeToggleButton";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 interface DashboardContextType {
   username: string | null;
@@ -43,8 +58,8 @@ Dashboard.Header = function ({ children }: { children: React.ReactNode }) {
         sx={{
           display: "flex",
           justifyContent: {
-            xs: "center", // center on mobile
-            sm: "space-between", // normal layout on desktop
+            xs: "center",
+            sm: "space-between",
           },
           alignItems: "center",
           paddingTop: "12px",
@@ -80,21 +95,104 @@ Dashboard.Header = function ({ children }: { children: React.ReactNode }) {
           }}
         >
           {children}
-          <IconButton
+          <Box
             color="inherit"
             aria-label="settings"
             sx={{
               fontWeight: "bold",
-              color: "#3D4852",
+              color: theme.palette.text.primary,
               border: `1px solid ${theme.palette.text.primary}`,
               borderRadius: "8px",
+              p: 0.5,
             }}
           >
-            <SettingsOutlinedIcon sx={{ color: theme.palette.text.primary }} />
-          </IconButton>
+            <Dashboard.SettingsDropdown />
+          </Box>
         </Box>
       </Toolbar>
     </AppBar>
+  );
+};
+
+Dashboard.SettingsDropdown = function () {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const theme = useTheme();
+  const { t } = useTranslation();
+
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <>
+      <IconButton onClick={handleClick} aria-label="Settings" size="small" sx={{ color: "text.primary" }}>
+        <SettingsOutlinedIcon />
+      </IconButton>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          elevation: 4,
+          sx: {
+            borderRadius: 2,
+            width: 240,
+            mt: 1,
+            overflow: "visible",
+            px: 1,
+            bgcolor: theme.palette.surface.main,
+          },
+        }}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        {/* Theme toggle */}
+        <Box px={1.5} py={1}>
+          <Typography variant="subtitle2" color="text.secondary" mb={0.5}>
+            {t("settings.Mode")}
+          </Typography>
+          <ThemeToggleButton />
+        </Box>
+
+        <Divider sx={{ my: 1 }} />
+
+        {/* Language toggle */}
+        <Box px={1.5} py={1}>
+          <Typography variant="subtitle2" color="text.secondary" mb={0.5}>
+            {t("settings.Language")}
+          </Typography>
+          <LanguageToggle />
+        </Box>
+
+        <Divider sx={{ my: 1 }} />
+
+        {/* Exit option */}
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            alert("Exiting...");
+          }}
+        >
+          <ListItemIcon>
+            <LogoutIcon />
+          </ListItemIcon>
+          <ListItemText primary={t("settings.Exit")} />
+        </MenuItem>
+      </Menu>
+    </>
   );
 };
 
@@ -154,10 +252,58 @@ Dashboard.Footer = function () {
 
           <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
             <CalendarMonthOutlinedIcon />
-            <Typography variant="body2">12:25 · Monday 23 December 2023</Typography>
+            <Dashboard.DateTimeDisplay date={new Date()} />
           </Box>
         </Box>
       </Box>
     </Box>
   );
+};
+
+Dashboard.DateTimeDisplay = ({ date }: { date: Date }) => {
+  const { i18n } = useTranslation();
+  const isRtl = i18n.language === "fa";
+
+  if (isRtl) {
+    const formatter = new Intl.DateTimeFormat("fa-IR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+
+    const parts = formatter.formatToParts(date);
+
+    const getPart = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
+
+    const hour = getPart("hour");
+    const minute = getPart("minute");
+    const weekday = getPart("weekday");
+    const day = getPart("day");
+    const month = getPart("month");
+    const year = getPart("year");
+
+    return (
+      <Typography variant="body2" sx={{ direction: "rtl" }}>
+        {hour}:{minute} · {weekday} {day} {month} {year}
+      </Typography>
+    );
+  } else {
+    const formatted = new Intl.DateTimeFormat("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(date);
+
+    return (
+      <Typography variant="body2" sx={{ direction: "ltr" }}>
+        {formatted}
+      </Typography>
+    );
+  }
 };

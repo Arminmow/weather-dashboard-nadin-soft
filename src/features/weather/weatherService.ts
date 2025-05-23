@@ -13,7 +13,6 @@ const WeatherService = {
       const response = await axios.get(BASE_SEARCH_URL, {
         params: { q: query, key: API_KEY },
       });
-      console.log(response.data);
 
       return response.data;
     } catch (error) {
@@ -29,14 +28,13 @@ const WeatherService = {
           key: API_KEY,
           q: `${lat},${lon}`,
           days: 14,
-          hour: 0
+          hour: 0,
         },
       });
 
       const data = response.data;
       const now = new Date();
-      console.log(data);
-      
+
       //This could be a function itself , but its fine for now
       const weatherInfo: WeatherData = {
         date: now.toLocaleDateString(),
@@ -49,9 +47,8 @@ const WeatherService = {
         feels_like: data.current.feelslike_c,
         description: data.current.condition.text,
         icon: data.current.condition.icon,
-        forecast : data.forecast
+        forecast: data.forecast,
       };
-      console.log(weatherInfo.icon);
 
       return weatherInfo;
     } catch (error) {
@@ -105,7 +102,6 @@ const WeatherService = {
       monthlyAverages[month] = parseFloat(avg.toFixed(1)); // round to 1 decimal place
     }
 
-    console.log(monthlyAverages);
     return monthlyAverages;
   },
 };

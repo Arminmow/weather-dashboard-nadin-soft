@@ -12,7 +12,8 @@
     "Wednesday": "چهارشنبه",
     "Thursday": "پنج شنبه",
     "Friday": "جمعه",
-    "Saturday": "شنبه"
+    "Saturday": "شنبه",
+    "Today" : "امروز"
   },
   "time": {
     "PM": "بعد از ظهر",
@@ -38,10 +39,20 @@
     "Light rain shower": "رگبار باران خفیف",
     "Thundery outbreaks possible": "احتمال طوفان رعد و برق",
     "Mist": "مه",
-    "Clear": "صاف"
+    "Clear": "صاف",
+    "Moderate rain": "باران متوسط"
   },
   "footer": {
     "text": "همه حقوق این سایت برای شرکت مهندسی نادین صدر آریا محفوظ است.",
     "contact": "تماس با ما : info@nadin.ir"
+  },
+  "settings": {
+    "Mode": "حالت",
+    "Language": "زبان",
+    "Exit": "خروج"
+  },
+  "search": {
+    "notFound": "هیچ شهری پیدا نشد",
+    "shortInput": "حداقل 2 کاراکتر وارد کنید"
   }
 }

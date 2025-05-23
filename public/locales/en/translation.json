@@ -12,7 +12,8 @@
     "Wednesday": "Wednesday",
     "Thursday": "Thursday",
     "Friday": "Friday",
-    "Saturday": "Saturday"
+    "Saturday": "Saturday",
+    "Today" : "Today"
   },
   "time": {
     "PM": "PM",
@@ -38,10 +39,20 @@
     "Light rain shower" : "Light rain shower",
     "Thundery outbreaks possible" : "Thundery outbreaks possible",
     "Mist" : "Mist",
-    "Clear" : "Clear"
+    "Clear" : "Clear",
+    "Moderate rain": "Moderate rain"
   },
   "footer": {
     "text": "All rights of this site are reserved for Nadin Sadr Aria Engineering Company.",
     "contact": "contact us: info@nadin.ir"
+  },
+  "settings" : {
+    "Mode" : "Mode",
+    "Language" : "Language",
+    "Exit": "Exit"
+  },
+  "search" :{
+    "notFound" : "No cities found",
+    "shortInput": "Type at least 2 characters"
   }
 }
