@@ -217,17 +217,21 @@ function Temperature({
       </Typography>
 
       {showMinMax && (
-        <Typography
+        <Box
           sx={{
+            display: "flex",
+            flexWrap: "wrap", // let items wrap if no room
+            gap: 0.5, // small gap between
             fontWeight: 500,
-            fontSize: "0.875rem", // 14px, smaller but readable
+            fontSize: "0.875rem",
             color: theme.palette.text.secondary,
             fontFamily: "'Google Sans', sans-serif",
             letterSpacing: "0.03em",
           }}
         >
-          {`${t("temp.max")}: ${temp_max}°  |  ${t("temp.min")}: ${temp_min}°`}
-        </Typography>
+          <Box>{`${t("temp.max")}: ${Math.round(temp_max)}`}</Box>
+          <Box>{`${t("temp.min")}: ${Math.round(temp_min)}`}</Box>
+        </Box>
       )}
     </Box>
   );
@@ -252,6 +256,7 @@ function WeatherDescription({ desc, feels_like }: { desc: string; feels_like: nu
         gap: "6px",
         color: theme.palette.text.primary,
         direction: isRtl ? "rtl" : "ltr",
+        textAlign: "center",
       }}
     >
       <Typography
@@ -259,6 +264,12 @@ function WeatherDescription({ desc, feels_like }: { desc: string; feels_like: nu
           ...interBase,
           ...size32,
           fontWeight: 600,
+          textAlign: "center",
+          whiteSpace: "normal",
+          wordBreak: "break-word",
+          lineHeight: 1.4,
+          maxWidth: "100%", // or a fixed maxWidth like '300px' if needed
+          hyphens: "auto",
         }}
       >
         {t(`weather.${desc}`)}
@@ -269,11 +280,23 @@ function WeatherDescription({ desc, feels_like }: { desc: string; feels_like: nu
           ...interBase,
           ...size16,
           fontWeight: 400,
-          textAlign: isRtl ? "right" : "left",
+          textAlign: "center",
           opacity: 0.85,
         }}
       >
-        {t("temp.feelsLike")} {feels_like}°C
+        <Box sx={{ direction: isRtl ? "rtl" : "ltr", display: "inline-flex", gap: 0.5, alignItems: "center" }}>
+          {isRtl ? (
+            <>
+              <span>{Math.round(feels_like)}°C</span>
+              <span>{t("temp.feelsLike")}</span>
+            </>
+          ) : (
+            <>
+              <span>{t("temp.feelsLike")}</span>
+              <span>{Math.round(feels_like)}°C</span>
+            </>
+          )}
+        </Box>
       </Typography>
     </Box>
   );
