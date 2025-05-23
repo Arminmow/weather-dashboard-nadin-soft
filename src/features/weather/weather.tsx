@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { Autocomplete, Box, Paper, TextField, Typography } from "@mui/material";
+import { Autocomplete, Box, Paper, TextField, Typography, useTheme } from "@mui/material";
 import { interBase, size14, size16, size32, size40, typographyBase } from "./styles";
 import WeatherService from "./weatherService";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -91,10 +91,11 @@ Weather.LocationSearch = function () {
 };
 
 function LocationBadge({ city }: { city: string }) {
+  const theme = useTheme();
   return (
     <Box
       sx={{
-        bgcolor: "#CDD9E0",
+        bgcolor: theme.palette.surface.item,
         p: "10px 13px",
         borderRadius: "50px",
         display: "flex",
@@ -110,8 +111,9 @@ function LocationBadge({ city }: { city: string }) {
 }
 
 function DayDate({ day, date, time }: { day: string; date: string; time: string }) {
+  const theme = useTheme();
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", gap: "4px", color: theme.palette.text.primary }}>
       <Typography sx={{ ...typographyBase, ...size32 }}>{day}</Typography>
       <Box sx={{ display: "flex", gap: "20px" }}>
         <Typography sx={{ ...typographyBase, ...size14 }}>{date}</Typography>
@@ -132,8 +134,9 @@ function Temperature({
   temp_max: number;
   showMinMax: boolean;
 }) {
+  const theme = useTheme();
   return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
+    <Box sx={{ display: "flex", flexDirection: "column", color: theme.palette.text.primary }}>
       <Typography sx={{ ...typographyBase, ...size40 }}>{`${temp}°C`}</Typography>
       {showMinMax ? (
         <Typography sx={{ ...typographyBase, ...size14 }}>
@@ -164,10 +167,22 @@ function WeatherDescription({ desc, feels_like }: { desc: string; feels_like: nu
 
 Weather.SummeryCard = function () {
   const { weather } = useContext(WeatherContext)!;
+  const theme = useTheme();
 
   if (!weather) return null;
   return (
-    <Paper elevation={4} sx={{ bgcolor: "#E1E9EE", borderRadius: 3, p: 3, width: "100%", mt: 2, boxSizing: "border-box", height:"100%" }}>
+    <Paper
+      elevation={4}
+      sx={{
+        bgcolor: theme.palette.surface.card,
+        borderRadius: 3,
+        p: 3,
+        width: "100%",
+        mt: 2,
+        boxSizing: "border-box",
+        height: "100%",
+      }}
+    >
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <LocationBadge city={weather.city} />
@@ -186,12 +201,25 @@ Weather.SummeryCard = function () {
 
 Weather.TemperatureChart = function () {
   const { tempAvg } = useContext(WeatherContext)!;
+  const theme = useTheme();
 
   const months = Object.keys(tempAvg);
   const temps = Object.values(tempAvg);
 
   return (
-    <Paper elevation={4} sx={{height: "100%",minHeight: "200px", bgcolor: "#E1E9EE", borderRadius: 3, p: 3, width: "100%", mt: 2, boxSizing: "border-box" }}>
+    <Paper
+      elevation={4}
+      sx={{
+        height: "100%",
+        minHeight: "200px",
+        bgcolor: theme.palette.surface.card,
+        borderRadius: 3,
+        p: 3,
+        width: "100%",
+        mt: 2,
+        boxSizing: "border-box",
+      }}
+    >
       <Box sx={{ display: "flex", flexDirection: "column" }}>
         <Typography
           sx={{
@@ -249,6 +277,7 @@ Weather.TemperatureChart = function () {
 };
 
 Weather.ForecastItem = function ({ day, src, temp }: { day: string; src: string; temp: number }) {
+  const theme = useTheme();
   return (
     <Box
       sx={{
@@ -257,11 +286,11 @@ Weather.ForecastItem = function ({ day, src, temp }: { day: string; src: string;
         gap: "24px",
         borderRadius: "24px",
         padding: "22px 16px",
-        bgcolor: "#CDD9E0",
+        bgcolor: theme.palette.surface.item,
       }}
     >
       <Box sx={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: "center" }}>
-        <Typography>{day}</Typography>
+        <Typography sx={{ color: theme.palette.text.primary }}>{day}</Typography>
         <Box
           sx={{
             height: "2px",
@@ -282,9 +311,11 @@ Weather.ForecastItem = function ({ day, src, temp }: { day: string; src: string;
 Weather.ForecastWrapper = function () {
   const { weather } = useContext(WeatherContext)!;
   const forecast = weather?.forecast.forecastday;
+  const theme = useTheme();
 
   return (
-    <Box
+    <Paper
+      elevation={4}
       sx={{
         overflowX: "hidden",
         width: "100%",
@@ -292,13 +323,13 @@ Weather.ForecastWrapper = function () {
         flexDirection: "column",
         gap: "16px",
         padding: "24px 28px",
-        bgcolor: "#E1E9EE",
+        bgcolor: theme.palette.surface.card,
         boxSizing: "border-box",
         borderRadius: "24px",
       }}
     >
       {/* Title on top */}
-      <Typography variant="h6" sx={{ fontWeight: "600", color: "#333", whiteSpace: "nowrap", mb: 2 }}>
+      <Typography variant="h6" sx={{ fontWeight: "600", color: theme.palette.text.primary, whiteSpace: "nowrap", mb: 2 }}>
         2 weeks Forecast
       </Typography>
 
@@ -330,6 +361,6 @@ Weather.ForecastWrapper = function () {
             );
           })}
       </Box>
-    </Box>
+    </Paper>
   );
 };

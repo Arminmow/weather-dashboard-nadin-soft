@@ -1,15 +1,16 @@
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { Weather } from "../weather/weather";
 import { Dashboard } from "./Dashboard";
 
 export function DashboardPage() {
+  const theme = useTheme();
   return (
     <Box
       sx={{
         minHeight: "100vh", // full screen height
         display: "flex",
         flexDirection: "column",
-        bgcolor: "#F3FAFE", // optional
+        bgcolor: theme.palette.surface.main, // optional
       }}
     >
       {/* Main dashboard content */}
