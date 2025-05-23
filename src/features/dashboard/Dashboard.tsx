@@ -58,8 +58,8 @@ Dashboard.Header = function ({ children }: { children: React.ReactNode }) {
         sx={{
           display: "flex",
           justifyContent: {
-            xs: "center", 
-            sm: "space-between", 
+            xs: "center",
+            sm: "space-between",
           },
           alignItems: "center",
           paddingTop: "12px",
@@ -252,10 +252,58 @@ Dashboard.Footer = function () {
 
           <Box sx={{ display: "flex", alignItems: "center", gap: "6px" }}>
             <CalendarMonthOutlinedIcon />
-            <Typography variant="body2">12:25 · Monday 23 December 2023</Typography>
+            <Dashboard.DateTimeDisplay date={new Date()} />
           </Box>
         </Box>
       </Box>
     </Box>
   );
+};
+
+Dashboard.DateTimeDisplay = ({ date }: { date: Date }) => {
+  const { i18n } = useTranslation();
+  const isRtl = i18n.language === "fa";
+
+  if (isRtl) {
+    const formatter = new Intl.DateTimeFormat("fa-IR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+
+    const parts = formatter.formatToParts(date);
+
+    const getPart = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
+
+    const hour = getPart("hour");
+    const minute = getPart("minute");
+    const weekday = getPart("weekday");
+    const day = getPart("day");
+    const month = getPart("month");
+    const year = getPart("year");
+
+    return (
+      <Typography variant="body2" sx={{ direction: "rtl" }}>
+        {hour}:{minute} · {weekday} {day} {month} {year}
+      </Typography>
+    );
+  } else {
+    const formatted = new Intl.DateTimeFormat("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(date);
+
+    return (
+      <Typography variant="body2" sx={{ direction: "ltr" }}>
+        {formatted}
+      </Typography>
+    );
+  }
 };

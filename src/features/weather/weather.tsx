@@ -159,6 +159,9 @@ function LocationBadge({ city }: { city: string }) {
           ...interBase,
           ...size16,
           color: theme.palette.text.primary,
+          fontFamily: "'Google Sans', sans-serif",
+          fontWeight: 400,
+          fontSize: "16px"
         }}
       >
         {city}
@@ -292,13 +295,14 @@ function WeatherDescription({ desc, feels_like }: { desc: string; feels_like: nu
         sx={{
           ...interBase,
           ...size32,
-          fontWeight: 600,
+          fontWeight: 400,
           textAlign: "center",
           whiteSpace: "normal",
           wordBreak: "break-word",
           lineHeight: 1.4,
           maxWidth: "100%",
           hyphens: "auto",
+          fontFamily: "'Google Sans', sans-serif",
         }}
       >
         {t(`weather.${desc}`)}
@@ -576,7 +580,19 @@ Weather.ForecastWrapper = function () {
       }}
     >
       {/* Title on top */}
-      <Typography variant="h6" sx={{ fontWeight: "600", color: theme.palette.text.primary, whiteSpace: "nowrap", mb: 2 }}>
+      <Typography
+        variant="h6"
+        sx={{
+          fontFamily: "'Google Sans', sans-serif",
+          fontWeight: 600,
+          fontSize: "24px",
+          lineHeight: "100%",
+          letterSpacing: "0%",
+          color: theme.palette.text.primary,
+          whiteSpace: "nowrap",
+          mb: 2,
+        }}
+      >
         {t("forecastTitle")}
       </Typography>
 
