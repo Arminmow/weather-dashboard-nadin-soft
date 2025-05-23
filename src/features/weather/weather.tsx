@@ -18,40 +18,40 @@ interface DashboardContextType {
 const WeatherContext = createContext<DashboardContextType | null>(null);
 
 export const Weather = ({ children }: { children: React.ReactNode }) => {
-  const [weather, setWeather] = useState<WeatherData | null>(null);
-  const [tempAvg, setTempAvg] = useState<Record<string, number>>({});
+  const DEFAULT_COORDS = { lat: 35.6892, lon: 51.389 };
+  const [weather, setWeather] = useState<WeatherData | null>(() => {
+    const saved = localStorage.getItem("weather");
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  const [tempAvg, setTempAvg] = useState<Record<string, number>>(() => {
+    const saved = localStorage.getItem("tempAvg");
+    return saved ? JSON.parse(saved) : {};
+  });
 
   useEffect(() => {
-    const savedWeather = localStorage.getItem("weather");
-    if (savedWeather) {
-      try {
-        setWeather(JSON.parse(savedWeather));
-      } catch (e) {
-        console.error("Failed to parse weather from localStorage", e);
-      }
+    if (!weather) {
+      WeatherService.getWeather(DEFAULT_COORDS.lat, DEFAULT_COORDS.lon).then((data) => {
+        setWeather(data);
+        localStorage.setItem("weather", JSON.stringify(data));
+      });
     }
-
-    const savedTempAvg = localStorage.getItem("tempAvg");
-    if (savedTempAvg) {
-      try {
-        setTempAvg(JSON.parse(savedTempAvg));
-      } catch (e) {
-        console.error("Failed to parse tempAvg from localStorage", e);
-      }
+    if (!tempAvg || Object.keys(tempAvg).length === 0) {
+      WeatherService.getDailyTemp(DEFAULT_COORDS.lat, DEFAULT_COORDS.lon).then((data) => {
+        setTempAvg(data ?? {});
+        localStorage.setItem("tempAvg", JSON.stringify(data ?? {}));
+      });
     }
   }, []);
 
   useEffect(() => {
-    if (weather) {
-      localStorage.setItem("weather", JSON.stringify(weather));
-    }
+    if (weather) localStorage.setItem("weather", JSON.stringify(weather));
   }, [weather]);
 
   useEffect(() => {
-    if (tempAvg && Object.keys(tempAvg).length > 0) {
-      localStorage.setItem("tempAvg", JSON.stringify(tempAvg));
-    }
+    if (tempAvg && Object.keys(tempAvg).length > 0) localStorage.setItem("tempAvg", JSON.stringify(tempAvg));
   }, [tempAvg]);
+
 
   return <WeatherContext.Provider value={{ weather, setWeather, tempAvg, setTempAvg }}>{children}</WeatherContext.Provider>;
 };
