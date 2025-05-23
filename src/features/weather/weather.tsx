@@ -21,6 +21,38 @@ export const Weather = ({ children }: { children: React.ReactNode }) => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
   const [tempAvg, setTempAvg] = useState<Record<string, number>>({});
 
+  useEffect(() => {
+    const savedWeather = localStorage.getItem("weather");
+    if (savedWeather) {
+      try {
+        setWeather(JSON.parse(savedWeather));
+      } catch (e) {
+        console.error("Failed to parse weather from localStorage", e);
+      }
+    }
+
+    const savedTempAvg = localStorage.getItem("tempAvg");
+    if (savedTempAvg) {
+      try {
+        setTempAvg(JSON.parse(savedTempAvg));
+      } catch (e) {
+        console.error("Failed to parse tempAvg from localStorage", e);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (weather) {
+      localStorage.setItem("weather", JSON.stringify(weather));
+    }
+  }, [weather]);
+
+  useEffect(() => {
+    if (tempAvg && Object.keys(tempAvg).length > 0) {
+      localStorage.setItem("tempAvg", JSON.stringify(tempAvg));
+    }
+  }, [tempAvg]);
+
   return <WeatherContext.Provider value={{ weather, setWeather, tempAvg, setTempAvg }}>{children}</WeatherContext.Provider>;
 };
 
