@@ -44,5 +44,9 @@
   "footer": {
     "text": "All rights of this site are reserved for Nadin Sadr Aria Engineering Company.",
     "contact": "contact us: info@nadin.ir"
+  },
+  "settings" : {
+    "Mode" : "Mode",
+    "Language" : "Language"
   }
 }

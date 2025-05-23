@@ -1,10 +1,27 @@
-import { createContext } from "react";
+import { createContext, useState } from "react";
 import AuthService from "../auth/authService";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import { AppBar, Box, IconButton, Toolbar, Typography, useTheme } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Divider,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  ToggleButton,
+  ToggleButtonGroup,
+  Toolbar,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import { useTranslation } from "react-i18next";
+import LanguageToggle from "../i18n/LanguageToggle";
+import ThemeToggleButton from "../theme/ThemeToggleButton";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 interface DashboardContextType {
   username: string | null;
@@ -90,11 +107,93 @@ Dashboard.Header = function ({ children }: { children: React.ReactNode }) {
               borderRadius: "8px",
             }}
           >
-            <SettingsOutlinedIcon sx={{ color: theme.palette.text.primary }} />
+            <Dashboard.SettingsDropdown />
           </IconButton>
         </Box>
       </Toolbar>
     </AppBar>
+  );
+};
+
+Dashboard.SettingsDropdown = function () {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const theme = useTheme();
+  const { t } = useTranslation();
+
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <>
+      <IconButton onClick={handleClick} aria-label="Settings" size="small" sx={{ color: "text.primary" }}>
+        <SettingsOutlinedIcon />
+      </IconButton>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          elevation: 4,
+          sx: {
+            borderRadius: 2,
+            width: 240,
+            mt: 1,
+            overflow: "visible",
+            px: 1,
+            bgcolor: theme.palette.surface.main,
+          },
+        }}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+      >
+        {/* Theme toggle */}
+        <Box px={1.5} py={1}>
+          <Typography variant="subtitle2" color="text.secondary" mb={0.5}>
+            {t('settings.Mode')}
+          </Typography>
+          <ThemeToggleButton />
+        </Box>
+
+        <Divider sx={{ my: 1 }} />
+
+        {/* Language toggle */}
+        <Box px={1.5} py={1}>
+          <Typography variant="subtitle2" color="text.secondary" mb={0.5}>
+            {t('settings.Language')}
+          </Typography>
+          <LanguageToggle />
+        </Box>
+
+        <Divider sx={{ my: 1 }} />
+
+        {/* Exit option */}
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            alert("Exiting...");
+          }}
+        >
+          <ListItemIcon>
+            <LogoutIcon />
+          </ListItemIcon>
+          <ListItemText primary="Exit" />
+        </MenuItem>
+      </Menu>
+    </>
   );
 };
 

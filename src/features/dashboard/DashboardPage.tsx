@@ -25,8 +25,6 @@ export function DashboardPage() {
           <Weather>
             <Dashboard.Header>
               <Weather.LocationSearch />
-              <ThemeToggleButton />
-              <LanguageToggle />
             </Dashboard.Header>
 
             {/* Main content */}

@@ -217,7 +217,7 @@ function Temperature({
 function WeatherIcon({ code, alt }: { code: string; alt: string }) {
   return (
     //OpenWeatherMap weather icon api. Not gonna download and store your Figma provided weather icons in /public, sorry
-    <Box component="img" src={code} alt={alt}  />
+    <Box component="img" src={code} alt={alt} />
   );
 }
 
@@ -289,7 +289,7 @@ Weather.SummeryCard = function () {
             display: "flex",
             flexDirection: "column",
             gap: 2,
-            textAlign: isRtl ? "right" : "left", 
+            textAlign: isRtl ? "right" : "left",
           }}
         >
           <LocationBadge city={weather.city} />
@@ -410,14 +410,27 @@ Weather.ForecastItem = function ({ day, src, temp }: { day: string; src: string;
       sx={{
         display: "flex",
         flexDirection: "column",
-        gap: "24px",
-        borderRadius: "24px",
+        gap: 3,
+        borderRadius: 4,
         padding: "22px 16px",
         bgcolor: theme.palette.surface.item,
+        alignItems: "center",
+        boxShadow: "0 2px 6px rgba(0,0,0,0.04)",
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: "center" }}>
-        <Typography sx={{ color: theme.palette.text.primary }}>{t(`weekDay.${day}`)}</Typography>
+      {/* Header & Day */}
+      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
+        <Typography
+          sx={{
+            color: theme.palette.text.primary,
+            fontSize: "1rem",
+            fontWeight: 600,
+          }}
+        >
+          {t(`weekDay.${day}`)}
+        </Typography>
+
+        {/* Divider */}
         <Box
           sx={{
             height: "2px",
@@ -428,9 +441,25 @@ Weather.ForecastItem = function ({ day, src, temp }: { day: string; src: string;
             borderImageSlice: 1,
           }}
         />
-        <WeatherIcon code={src} alt="weather icon" />
-        <Temperature temp={temp} temp_min={0} temp_max={0} showMinMax={false} />
       </Box>
+
+      {/* Weather Icon */}
+      <WeatherIcon code={src} alt="weather icon" />
+
+      {/* Temp */}
+      {/* <Temperature temp={temp} temp_min={0} temp_max={0} showMinMax={false} /> */}
+      <Typography
+        sx={{
+          fontFamily: "'Google Sans', sans-serif",
+          fontWeight: 500,
+          fontSize: "18px",
+          lineHeight: "100%",
+          letterSpacing: "0%",
+          color: theme.palette.text.primary,
+        }}
+      >
+        {`${temp}°C`}
+      </Typography>
     </Box>
   );
 };
