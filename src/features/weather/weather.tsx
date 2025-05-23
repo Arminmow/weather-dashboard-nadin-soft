@@ -7,7 +7,6 @@ import type { City } from "../dashboard/types";
 import type { WeatherData } from "./types";
 import { LineChart } from "@mui/x-charts";
 import { useTranslation } from "react-i18next";
-import { t } from "i18next";
 
 interface DashboardContextType {
   weather: WeatherData | null;
@@ -218,20 +217,46 @@ function Temperature({
 function WeatherIcon({ code, alt }: { code: string; alt: string }) {
   return (
     //OpenWeatherMap weather icon api. Not gonna download and store your Figma provided weather icons in /public, sorry
-    <Box component="img" src={code} alt={alt} sx={{ width: 100, height: 100 }} />
+    <Box component="img" src={code} alt={alt}  />
   );
 }
 
 function WeatherDescription({ desc, feels_like }: { desc: string; feels_like: number }) {
   const { t, i18n } = useTranslation();
   const isRtl = i18n.language === "fa";
+  const theme = useTheme();
   return (
-    <>
-      <Typography sx={{ ...interBase, ...size32 }}>{t(`weather.${desc}`)}</Typography>
-      <Typography sx={{ ...interBase, ...size16, direction: isRtl ? "rtl" : "ltr" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "6px",
+        color: theme.palette.text.primary,
+        direction: isRtl ? "rtl" : "ltr",
+      }}
+    >
+      <Typography
+        sx={{
+          ...interBase,
+          ...size32,
+          fontWeight: 600,
+        }}
+      >
+        {t(`weather.${desc}`)}
+      </Typography>
+
+      <Typography
+        sx={{
+          ...interBase,
+          ...size16,
+          fontWeight: 400,
+          textAlign: isRtl ? "right" : "left",
+          opacity: 0.85,
+        }}
+      >
         {t("temp.feelsLike")} {feels_like}°C
       </Typography>
-    </>
+    </Box>
   );
 }
 
@@ -255,7 +280,7 @@ Weather.SummeryCard = function () {
         mt: 2,
         boxSizing: "border-box",
         height: "100%",
-        direction: isRtl ? "rtl" : "ltr", // <-- Boom, flip the direction
+        direction: isRtl ? "rtl" : "ltr",
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -264,7 +289,7 @@ Weather.SummeryCard = function () {
             display: "flex",
             flexDirection: "column",
             gap: 2,
-            textAlign: isRtl ? "right" : "left", // Optional: align text right on RTL
+            textAlign: isRtl ? "right" : "left", 
           }}
         >
           <LocationBadge city={weather.city} />
@@ -278,6 +303,7 @@ Weather.SummeryCard = function () {
             flexDirection: "column",
             alignItems: "center",
             gap: 2,
+            justifyContent: "center",
           }}
         >
           <WeatherIcon code={weather.icon} alt={weather.description} />
@@ -308,10 +334,9 @@ Weather.TemperatureChart = function () {
         mt: 2,
         boxSizing: "border-box",
         direction: isRtl ? "rtl" : "ltr",
-       
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between" , height: "100%" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%" }}>
         <Typography
           sx={{
             fontFamily: "Google Sans, sans-serif",
@@ -368,7 +393,7 @@ Weather.TemperatureChart = function () {
                 strokeWidth: 5,
               },
               height: "100%",
-              justifyContent:"end"
+              justifyContent: "end",
             }}
           />
         </Box>
