@@ -85,7 +85,7 @@ Weather.LocationSearch = function () {
       getOptionLabel={(option) => `${option.name} - ${option.country}`}
       loading={loading}
       filterOptions={(x) => x}
-      noOptionsText={inputValue.length < 2 ? "Type at least 2 characters" : "No cities found"}
+      noOptionsText={inputValue.length < 2 ? t("search.shortInput") : t("search.notFound")}
       renderInput={(params) => (
         <TextField
           {...params}

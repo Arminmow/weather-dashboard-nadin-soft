@@ -47,6 +47,11 @@
   },
   "settings": {
     "Mode": "حالت",
-    "Language": "زبان"
+    "Language": "زبان",
+    "Exit": "خروج"
+  },
+  "search": {
+    "notFound": "هیچ شهری پیدا نشد",
+    "shortInput": "حداقل 2 کاراکتر وارد کنید"
   }
 }

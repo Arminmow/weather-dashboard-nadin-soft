@@ -190,7 +190,7 @@ Dashboard.SettingsDropdown = function () {
           <ListItemIcon>
             <LogoutIcon />
           </ListItemIcon>
-          <ListItemText primary="Exit" />
+          <ListItemText primary={t('settings.Exit')} />
         </MenuItem>
       </Menu>
     </>
