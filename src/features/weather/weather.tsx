@@ -99,9 +99,9 @@ function LocationBadge({ city }: { city: string }) {
     <Box
       sx={{
         bgcolor: theme.palette.surface.item,
-         p: "10px 13px",
-        borderRadius: "9999px", 
-        display: "flex", 
+        p: "10px 13px",
+        borderRadius: "9999px",
+        display: "flex",
         gap: 1.5,
         alignItems: "center",
       }}
@@ -301,17 +301,17 @@ Weather.TemperatureChart = function () {
       elevation={4}
       sx={{
         height: "100%",
-        minHeight: "200px",
         bgcolor: theme.palette.surface.card,
         borderRadius: 3,
-        p: 3,
+        p: 1,
         width: "100%",
         mt: 2,
         boxSizing: "border-box",
         direction: isRtl ? "rtl" : "ltr",
+       
       }}
     >
-      <Box sx={{ display: "flex", flexDirection: "column" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between" , height: "100%" }}>
         <Typography
           sx={{
             fontFamily: "Google Sans, sans-serif",
@@ -319,19 +319,25 @@ Weather.TemperatureChart = function () {
             fontSize: "18px",
             lineHeight: "100%",
             letterSpacing: "0%",
-            mb: 2,
+            m: 2,
+            mb: 0,
             textAlign: isRtl ? "right" : "left",
           }}
         >
           {t("chartTitle")}
         </Typography>
-        <Box sx={{ flex: 1, minHeight: 0 }}>
+        <Box sx={{ flexGrow: 1 }}>
           <LineChart
+            height={200}
             xAxis={[
               {
                 scaleType: "point",
                 data: months,
                 disableLine: true,
+                tickLabelStyle: {
+                  fontSize: 12,
+                  fill: theme.palette.text.primary,
+                },
               },
             ]}
             yAxis={[
@@ -351,7 +357,7 @@ Weather.TemperatureChart = function () {
             sx={{
               direction: isRtl ? "rtl" : "ltr",
               "& .MuiChartsAxis-tickLabel": {
-                fontSize: 13,
+                fontSize: 5,
                 fill: theme.palette.text.primary,
               },
               "& .MuiChartsGrid-line": {
@@ -359,8 +365,10 @@ Weather.TemperatureChart = function () {
                 strokeDasharray: "4 4",
               },
               "& .MuiChartsLineSeries-line": {
-                strokeWidth: 3,
+                strokeWidth: 5,
               },
+              height: "100%",
+              justifyContent:"end"
             }}
           />
         </Box>
