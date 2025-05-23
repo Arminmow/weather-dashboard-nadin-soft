@@ -1,8 +1,6 @@
 import { Box, useTheme } from "@mui/material";
 import { Weather } from "../weather/weather";
 import { Dashboard } from "./Dashboard";
-import ThemeToggleButton from "../theme/ThemeToggleButton";
-import LanguageToggle from "../i18n/LanguageToggle";
 import { useTranslation } from "react-i18next";
 
 export function DashboardPage() {
