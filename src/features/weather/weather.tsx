@@ -549,9 +549,16 @@ Weather.ForecastWrapper = function () {
       >
         {forecast &&
           forecast.map((day: any, index: number) => {
-            const weekday = new Date(day.date).toLocaleDateString("en-US", {
-              weekday: "long",
-            });
+            const today = new Date();
+            const dayDate = new Date(day.date + "T00:00:00");
+
+            const isToday =
+              today.getFullYear() === dayDate.getFullYear() &&
+              today.getMonth() === dayDate.getMonth() &&
+              today.getDate() === dayDate.getDate();
+
+            const weekday = isToday ? "Today" : dayDate.toLocaleDateString( "en-US", { weekday: "long" });
+
             return (
               <Weather.ForecastItem
                 key={index}

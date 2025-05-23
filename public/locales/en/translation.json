@@ -12,7 +12,8 @@
     "Wednesday": "Wednesday",
     "Thursday": "Thursday",
     "Friday": "Friday",
-    "Saturday": "Saturday"
+    "Saturday": "Saturday",
+    "Today" : "Today"
   },
   "time": {
     "PM": "PM",

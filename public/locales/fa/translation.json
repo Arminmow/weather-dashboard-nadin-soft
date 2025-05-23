@@ -12,7 +12,8 @@
     "Wednesday": "چهارشنبه",
     "Thursday": "پنج شنبه",
     "Friday": "جمعه",
-    "Saturday": "شنبه"
+    "Saturday": "شنبه",
+    "Today" : "امروز"
   },
   "time": {
     "PM": "بعد از ظهر",
