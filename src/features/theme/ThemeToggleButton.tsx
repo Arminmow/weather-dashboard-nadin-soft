@@ -1,5 +1,5 @@
 import React from "react";
-import { IconButton, ToggleButton, ToggleButtonGroup, useTheme } from "@mui/material";
+import {  ToggleButton, ToggleButtonGroup, useTheme } from "@mui/material";
 import { useThemeContext } from "./ThemeContext";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
@@ -10,7 +10,7 @@ const ThemeToggleButton: React.FC = () => {
 
   const handleModeChange = (_: any, newMode: "light" | "dark" | null) => {
     if (newMode !== null && newMode !== mode) {
-      toggleMode(); // stays raw just like your logic
+      toggleMode();
     }
   };
 

@@ -1,12 +1,12 @@
-import { createContext, use, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { Autocomplete, Box, Paper, TextField, Typography, useTheme } from "@mui/material";
-import { interBase, size14, size16, size32, size40, typographyBase } from "./styles";
+import { LineChart } from "@mui/x-charts";
+import { useTranslation } from "react-i18next";
+import { interBase, size16, size32 } from "./styles";
 import WeatherService from "./weatherService";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import type { City } from "../dashboard/types";
 import type { WeatherData } from "./types";
-import { LineChart } from "@mui/x-charts";
-import { useTranslation } from "react-i18next";
 
 interface DashboardContextType {
   weather: WeatherData | null;
@@ -67,10 +67,8 @@ Weather.LocationSearch = function () {
 
     WeatherService.getWeather(newValue.lat, newValue.lon).then((data) => {
       setWeather(data);
-      console.log("weatherInfo", data);
     });
     WeatherService.getDailyTemp(newValue.lat, newValue.lon).then((data) => {
-      console.log("tempAvg", data);
       setTempAvg(data ?? {});
     });
   };
@@ -220,8 +218,8 @@ function Temperature({
         <Box
           sx={{
             display: "flex",
-            flexWrap: "wrap", // let items wrap if no room
-            gap: 0.5, // small gap between
+            flexWrap: "wrap",
+            gap: 0.5,
             fontWeight: 500,
             fontSize: "0.875rem",
             color: theme.palette.text.secondary,
@@ -268,7 +266,7 @@ function WeatherDescription({ desc, feels_like }: { desc: string; feels_like: nu
           whiteSpace: "normal",
           wordBreak: "break-word",
           lineHeight: 1.4,
-          maxWidth: "100%", // or a fixed maxWidth like '300px' if needed
+          maxWidth: "100%",
           hyphens: "auto",
         }}
       >
@@ -489,7 +487,6 @@ Weather.ForecastItem = function ({ day, src, temp }: { day: string; src: string;
       <WeatherIcon code={src} alt="weather icon" />
 
       {/* Temp */}
-      {/* <Temperature temp={temp} temp_min={0} temp_max={0} showMinMax={false} /> */}
       <Typography
         sx={{
           fontFamily: "'Google Sans', sans-serif",
@@ -541,9 +538,9 @@ Weather.ForecastWrapper = function () {
           flexDirection: "row",
           gap: "24px",
           overflowX: "auto",
-          scrollbarWidth: "none", // Firefox
+          scrollbarWidth: "none", 
           "&::-webkit-scrollbar": {
-            display: "none", // Chrome, Safari, Edge
+            display: "none",
           },
         }}
       >
@@ -557,7 +554,7 @@ Weather.ForecastWrapper = function () {
               today.getMonth() === dayDate.getMonth() &&
               today.getDate() === dayDate.getDate();
 
-            const weekday = isToday ? "Today" : dayDate.toLocaleDateString( "en-US", { weekday: "long" });
+            const weekday = isToday ? "Today" : dayDate.toLocaleDateString("en-US", { weekday: "long" });
 
             return (
               <Weather.ForecastItem

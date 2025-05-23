@@ -1,6 +1,4 @@
 import { createContext, useState } from "react";
-import AuthService from "../auth/authService";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import {
   AppBar,
   Box,
@@ -10,15 +8,15 @@ import {
   ListItemText,
   Menu,
   MenuItem,
-  ToggleButton,
-  ToggleButtonGroup,
   Toolbar,
   Typography,
   useTheme,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import MailOutlineOutlinedIcon from "@mui/icons-material/MailOutlineOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
-import { useTranslation } from "react-i18next";
+import AuthService from "../auth/authService";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LanguageToggle from "../i18n/LanguageToggle";
 import ThemeToggleButton from "../theme/ThemeToggleButton";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -60,8 +58,8 @@ Dashboard.Header = function ({ children }: { children: React.ReactNode }) {
         sx={{
           display: "flex",
           justifyContent: {
-            xs: "center", // center on mobile
-            sm: "space-between", // normal layout on desktop
+            xs: "center", 
+            sm: "space-between", 
           },
           alignItems: "center",
           paddingTop: "12px",
@@ -105,7 +103,7 @@ Dashboard.Header = function ({ children }: { children: React.ReactNode }) {
               color: theme.palette.text.primary,
               border: `1px solid ${theme.palette.text.primary}`,
               borderRadius: "8px",
-              p: 0.5
+              p: 0.5,
             }}
           >
             <Dashboard.SettingsDropdown />
@@ -164,7 +162,7 @@ Dashboard.SettingsDropdown = function () {
         {/* Theme toggle */}
         <Box px={1.5} py={1}>
           <Typography variant="subtitle2" color="text.secondary" mb={0.5}>
-            {t('settings.Mode')}
+            {t("settings.Mode")}
           </Typography>
           <ThemeToggleButton />
         </Box>
@@ -174,7 +172,7 @@ Dashboard.SettingsDropdown = function () {
         {/* Language toggle */}
         <Box px={1.5} py={1}>
           <Typography variant="subtitle2" color="text.secondary" mb={0.5}>
-            {t('settings.Language')}
+            {t("settings.Language")}
           </Typography>
           <LanguageToggle />
         </Box>
@@ -191,7 +189,7 @@ Dashboard.SettingsDropdown = function () {
           <ListItemIcon>
             <LogoutIcon />
           </ListItemIcon>
-          <ListItemText primary={t('settings.Exit')} />
+          <ListItemText primary={t("settings.Exit")} />
         </MenuItem>
       </Menu>
     </>
