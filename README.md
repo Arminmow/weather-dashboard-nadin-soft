@@ -41,7 +41,7 @@ npm run dev
 5. Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ---
-## 🧠 About the Design Pattern – Compound Components
+##  About the Design Pattern – Compound Components
 
 This project uses the Compound Components pattern — where related components live together under a single parent (like `Login.Title`, `Login.Input`, `Login.Button`, etc). This keeps the API clean, flexible, and easy to understand.
 
@@ -65,6 +65,17 @@ Since this project already rocks the Compound Components pattern with a provider
 The parent component holds the state and exposes it via context, so all related sub-components can access and update that state directly without passing props around endlessly. This approach avoids prop-drilling and keeps the data flow clear.
 
 It also helps keep the components loosely coupled but still working together, making the code easier to maintain and reason about. Overall, using context inside compound components strikes a good balance between simplicity and scalability for state management.
+
+##  Local Storage
+
+This app uses **localStorage** to persist key user preferences across sessions:
+
+- **Username** – Keeps you logged in even after a page refresh.
+- **Theme** – Remembers your light/dark mode preference.
+- **Language** – Retains your selected language so you don’t have to set it again.
+
+There’s no backend.
+
 
 
 ### Why Not Redux?
