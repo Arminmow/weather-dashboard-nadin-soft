@@ -2,7 +2,6 @@ const USER_KEY = "username";
 
 const AuthService = {
   login(username: string) {
-
     localStorage.setItem(USER_KEY, username);
   },
 
