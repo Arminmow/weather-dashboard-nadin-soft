@@ -1,5 +1,16 @@
+## Demo
 
-# Check it out [here](https://nadinsoft-weatherdashboard.netlify.app/)
+See the app in action on desktop and mobile:
+
+| Desktop View                                 | Mobile View                                 |
+|----------------------------------------------|----------------------------------------------|
+| ![Desktop Screenshot](https://github.com/user-attachments/assets/d30cc088-a0ee-48f7-b935-ff474504f6fb) | ![Mobile Screenshot](https://github.com/user-attachments/assets/d0e57143-c5f2-458c-8bb0-0dc1a8d2a2d6) |
+
+
+
+
+
+# Check it out live [here](https://nadinsoft-weatherdashboard.netlify.app/)
 
 # Or if you wanna run it locally
 
@@ -84,5 +95,19 @@ Here’s how it goes down:
 - Round the averages to one decimal to keep it clean.
 
 This way, even without WeatherAPI history, we still get solid monthly averages that make sense.
+
+---
+## Folder Structure
+
+This project uses a **feature-based folder structure** under `src/features/`. Each feature (like `login`, `dashboard`, `theme`, etc.) gets its own folder containing everything it needs:
+
+- Components  
+- Services (API calls, auth, etc.)  
+- Types (TypeScript interfaces/types)  
+- Contexts or hooks if needed  
+
+Keeping all related files together helps keep things organized and makes it easier to find and maintain code by feature instead of by file type.
+
+
 
 
