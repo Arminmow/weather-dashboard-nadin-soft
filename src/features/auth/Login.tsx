@@ -2,6 +2,7 @@ import { Box, TextField, Button, Paper, Typography, useTheme } from "@mui/materi
 import { createContext, useContext, useState, type ReactNode } from "react";
 import AuthService from "./authService";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 interface LoginContextType {
   username: string;
@@ -17,6 +18,7 @@ export const Login = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState("");
   const { i18n } = useTranslation();
   const isRtl = i18n.language === "fa";
+  const navigate = useNavigate();
 
   const validate = (name: string) => {
     if (name.trim().length < 3) {
@@ -36,6 +38,7 @@ export const Login = ({ children }: { children: ReactNode }) => {
     if (!validate(username)) return;
 
     AuthService.login(username.trim());
+    navigate("/dashboard");
   };
 
   return (
@@ -53,8 +56,8 @@ export const Login = ({ children }: { children: ReactNode }) => {
             md: "calc(100% * 2 / 4)",
           },
           height: "calc(100% * 560 / 960)",
-          display: "flex", // flex container here
-          flexDirection: isRtl ? "row-reverse" : "row", // flip based on language
+          display: "flex", 
+          flexDirection: isRtl ? "row-reverse" : "row",
           borderRadius: "12px",
           overflow: "hidden",
           boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.25)",
@@ -110,7 +113,6 @@ Login.Button = function LoginButton() {
     <Button
       sx={{ width: "100%", bgcolor: theme.palette.primary.main, px: "22px", py: "8px" }}
       variant="contained"
-      color="text.primary"
       type="submit"
       disabled={!!error || username.trim().length === 0}
     >

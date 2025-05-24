@@ -20,6 +20,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import LanguageToggle from "../i18n/LanguageToggle";
 import ThemeToggleButton from "../theme/ThemeToggleButton";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { useNavigate } from "react-router-dom";
 
 interface DashboardContextType {
   username: string | null;
@@ -118,6 +119,7 @@ Dashboard.SettingsDropdown = function () {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const theme = useTheme();
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   const open = Boolean(anchorEl);
 
@@ -182,8 +184,8 @@ Dashboard.SettingsDropdown = function () {
         {/* Exit option */}
         <MenuItem
           onClick={() => {
-            handleClose();
-            alert("Exiting...");
+            AuthService.logout();
+            navigate("/login");
           }}
         >
           <ListItemIcon>

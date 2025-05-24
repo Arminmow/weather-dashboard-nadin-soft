@@ -7,10 +7,6 @@ import { Routes, Route, useNavigate, BrowserRouter } from "react-router-dom";
 import { LoginPage } from "./features/auth/LoginPage";
 import { ProtectedRoute } from "./features/routes/ProtectedRoute";
 
-// I dont like comments , I think the code should be self explanatory , But...
-//Imma leave you some comments whereever I think I need to explain myself
-//Re deploy
-
 function AppRouter() {
   const navigate = useNavigate();
 

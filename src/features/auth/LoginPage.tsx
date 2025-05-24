@@ -1,12 +1,9 @@
 import { Box, useTheme } from "@mui/material";
 import { Login } from "./Login";
 import LanguageSelect from "../i18n/LanguageSelect";
-import { useTranslation } from "react-i18next";
 
 export function LoginPage() {
   const theme = useTheme();
-  const { i18n } = useTranslation();
-  const isRtl = i18n.language === "fa";
   return (
     <Box
       display="flex"
