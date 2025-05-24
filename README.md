@@ -82,6 +82,13 @@ This app uses the WeatherAPI service to fetch location data, current weather, an
 
 Also, since the API is free, the forecast length might vary — some locations may not have a full 14-day forecast available, and you might see fewer days of data depending on the location.
 
+# ⚠️Network Issues Notice
+
+WeatherAPI **might not work** on some networks because, well... Iran. 
+If it seems you can’t get the data, try switching your network or using a VPN.
+This isn’t something I can control , just how it is with external services and network restrictions.
+
+
 ### Average Monthly Temperature Calculation
 
 Since WeatherAPI don’t give us historical data, I’m pulling daily temps from `archive-api.open-meteo.com` for the past year. Then, I crunch those numbers to get average temps for each month.
