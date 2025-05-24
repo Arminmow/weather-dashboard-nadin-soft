@@ -1,6 +1,8 @@
-import { Box, TextField, Button, Paper, Typography } from "@mui/material";
+import { Box, TextField, Button, Paper, Typography, useTheme } from "@mui/material";
 import { createContext, useContext, useState, type ReactNode } from "react";
 import AuthService from "./authService";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 interface LoginContextType {
   username: string;
@@ -14,6 +16,9 @@ const LoginContext = createContext<LoginContextType | undefined>(undefined);
 export const Login = ({ children }: { children: ReactNode }) => {
   const [username, setUsername] = useState("");
   const [error, setError] = useState("");
+  const { i18n } = useTranslation();
+  const isRtl = i18n.language === "fa";
+  const navigate = useNavigate();
 
   const validate = (name: string) => {
     if (name.trim().length < 3) {
@@ -33,6 +38,7 @@ export const Login = ({ children }: { children: ReactNode }) => {
     if (!validate(username)) return;
 
     AuthService.login(username.trim());
+    navigate("/dashboard");
   };
 
   return (
@@ -50,8 +56,8 @@ export const Login = ({ children }: { children: ReactNode }) => {
             md: "calc(100% * 2 / 4)",
           },
           height: "calc(100% * 560 / 960)",
-          display: "flex",
-          flexDirection: "row",
+          display: "flex", 
+          flexDirection: isRtl ? "row-reverse" : "row",
           borderRadius: "12px",
           overflow: "hidden",
           boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.25)",
@@ -71,10 +77,26 @@ const useLoginCtx = () => {
 
 Login.Input = function LoginInput() {
   const { username, setUsername, error } = useLoginCtx();
+  const { t } = useTranslation();
   return (
     <TextField
-      sx={{ width: "100%" }}
-      label="Enter Your Name"
+      sx={{
+        width: "100%",
+        input: { color: "text.primary" },
+        label: { color: "text.secondary" },
+        "& .MuiOutlinedInput-root": {
+          "& fieldset": {
+            borderColor: "text.primary",
+          },
+          "&:hover fieldset": {
+            borderColor: "primary.main",
+          },
+          "&.Mui-focused fieldset": {
+            borderColor: "primary.main",
+          },
+        },
+      }}
+      label={t("login.Input")}
       value={username}
       onChange={(e) => setUsername(e.target.value)}
       error={!!error}
@@ -85,43 +107,46 @@ Login.Input = function LoginInput() {
 
 Login.Button = function LoginButton() {
   const { error, username } = useLoginCtx();
+  const { t } = useTranslation();
+  const theme = useTheme();
   return (
     <Button
-      sx={{ width: "100%", bgcolor: "#2196F3", px: "22px", py: "8px" }}
+      sx={{ width: "100%", bgcolor: theme.palette.primary.main, px: "22px", py: "8px" }}
       variant="contained"
-      color="primary"
       type="submit"
       disabled={!!error || username.trim().length === 0}
     >
-      Login
+      {t("login.Btn")}
     </Button>
   );
 };
 
 Login.Title = function LoginTitle() {
+  const { t } = useTranslation();
   return (
     <Typography
       variant="h4"
       sx={{
         fontWeight: 700,
         fontFamily: "Roboto",
-        color: "#050F24",
+        color: "text.primary",
         mb: 4,
         fontSize: "1.5rem",
       }}
     >
-      Login
+      {t("login.Title")}
     </Typography>
   );
 };
 
 Login.Banner = function LoginBanner() {
+  const theme = useTheme();
   return (
     <Box
       sx={{
         width: "100%",
         height: "100%",
-        backgroundColor: "#D3E1E7",
+        backgroundColor: theme.palette.surface.item,
         position: "relative",
         overflow: "hidden",
       }}

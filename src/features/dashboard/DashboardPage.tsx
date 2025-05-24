@@ -11,10 +11,10 @@ export function DashboardPage() {
   return (
     <Box
       sx={{
-        minHeight: "100vh", // full screen height
+        minHeight: "100vh", 
         display: "flex",
         flexDirection: "column",
-        bgcolor: theme.palette.surface.main, // optional
+        bgcolor: theme.palette.surface.main, 
       }}
     >
       {/* Main dashboard content */}
@@ -44,7 +44,7 @@ export function DashboardPage() {
                   display: "flex",
                   flexDirection: {
                     xs: "column",
-                    md: isRtl ? "row-reverse" : "row", // 👈 Flip row only on desktop if fa
+                    md: isRtl ? "row-reverse" : "row",
                   },
                   width: "100%",
                   gap: "50px",

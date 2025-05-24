@@ -1,20 +1,29 @@
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { Login } from "./Login";
+import LanguageSelect from "../i18n/LanguageSelect";
 
 export function LoginPage() {
+  const theme = useTheme();
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" height="100vh" bgcolor="#F3FAFE">
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      height="100vh"
+      bgcolor={theme.palette.surface.main}
+      flexDirection="column"
+      gap="50px"
+    >
       <Login>
         {/* Login Section */}
         <Box
           sx={{
-            display: "flex",
             flex: 1,
+            display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            height: "100%",
-            bgcolor: "white",
+            bgcolor: theme.palette.surface.card,
             padding: "60px 0px",
             boxSizing: "border-box",
           }}
@@ -48,6 +57,7 @@ export function LoginPage() {
           <Login.Banner />
         </Box>
       </Login>
+      <LanguageSelect />
     </Box>
   );
 }

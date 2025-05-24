@@ -72,7 +72,7 @@ const WeatherService = {
           longitude: lon,
           start_date: startDate,
           end_date: endDate,
-          daily: "temperature_2m_mean", //
+          daily: "temperature_2m_mean", 
         },
       });
 
