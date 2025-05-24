@@ -64,5 +64,25 @@ Adding Redux here would just mean extra dependency, more boilerplate, and unnece
 
 Knowing your tools and using the right one for the scale and needs of your app is key. In this case, Redux would be more of a burden than a help.
 
+---
+### About the API
+
+This app uses the WeatherAPI service to fetch location data, current weather, and forecasts. One important note: WeatherAPI doesn’t support searching locations in Persian, so even if the app is in Farsi, users can only search locations using English characters.
+
+Also, since the API is free, the forecast length might vary — some locations may not have a full 14-day forecast available, and you might see fewer days of data depending on the location.
+
+### Average Monthly Temperature Calculation
+
+Since WeatherAPI don’t give us historical data, I’m pulling daily temps from `archive-api.open-meteo.com` for the past year. Then, I crunch those numbers to get average temps for each month.
+
+Here’s how it goes down:
+
+- Grab daily temps with their dates.
+- Turn those dates into month names like "Jan", "Feb", etc.
+- Group all temps by their month.
+- Calculate the average for each month by adding up temps and dividing by the count.
+- Round the averages to one decimal to keep it clean.
+
+This way, even without WeatherAPI history, we still get solid monthly averages that make sense.
 
 
