@@ -1,5 +1,7 @@
 ## Demo
 
+هنوز داره مثل بنز کار میکنه بعد میان ادمو ghost میکنن مسخره ها :/
+
 See the app in action on desktop and mobile:
 
 | Desktop View                                 | Mobile View                                 |
